@@ -67,13 +67,18 @@ public class YelpBusinessDetails
 
     public Address location;
 
-    
-    
     @Pojo
     @ThreadUnsafe
     @Mutable
     public static class Hours
     {
+
+        public Type hoursType;
+
+        @SerializedName("is_open_now")
+        public Boolean isOpenNow;
+
+        public List<OpenTimes> open;
 
         public enum Type
         {
@@ -143,10 +148,52 @@ public class YelpBusinessDetails
 
         }
 
-        public Type hoursType;
+        @Override
+        public int hashCode()
+        {
+            int hash = 7;
+            hash = 97 * hash + Objects.hashCode(this.hoursType);
+            hash = 97 * hash + Objects.hashCode(this.isOpenNow);
+            hash = 97 * hash + Objects.hashCode(this.open);
+            return hash;
+        }
 
-        @SerializedName("is_open_now")
-        public Boolean isOpenNow;
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+            if (obj == null)
+            {
+                return false;
+            }
+            if (getClass() != obj.getClass())
+            {
+                return false;
+            }
+            final Hours other = (Hours) obj;
+            if (this.hoursType != other.hoursType)
+            {
+                return false;
+            }
+            if (!Objects.equals(this.isOpenNow, other.isOpenNow))
+            {
+                return false;
+            }
+            if (!Objects.equals(this.open, other.open))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Hours{" + "hoursType=" + hoursType + ", isOpenNow=" + isOpenNow + ", open=" + open + '}';
+        }
 
     }
 

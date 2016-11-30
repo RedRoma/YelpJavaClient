@@ -77,18 +77,25 @@ public class YelpBusinessTest
     @Test
     public void testInstanceHasAllData()
     {
-        assertThat(instance.id, not(isEmptyOrNullString()));
-        assertThat(instance.imageURL, not(isEmptyOrNullString()));
-        assertThat(instance.name, not(isEmptyOrNullString()));
-        assertThat(instance.phone, not(isEmptyOrNullString()));
-        assertThat(instance.url, not(isEmptyOrNullString()));
-        assertThat(instance.isClosed, notNullValue());
-        assertThat(instance.distance, notNullValue());
-        assertThat(instance.categories, notNullValue());
-        
-        instance.categories.forEach(this::checkCategory);
-        checkCoordinate(instance.coordinates);
-        checkAddress(instance.location);
+        checkBusiness(instance);
+        checkBusiness(first);
+        checkBusiness(second);
+    }
+    
+    private void checkBusiness(YelpBusiness business)
+    {
+        assertThat(business.id, not(isEmptyOrNullString()));
+        assertThat(business.imageURL, not(isEmptyOrNullString()));
+        assertThat(business.name, not(isEmptyOrNullString()));
+        assertThat(business.phone, not(isEmptyOrNullString()));
+        assertThat(business.url, not(isEmptyOrNullString()));
+        assertThat(business.isClosed, notNullValue());
+        assertThat(business.distance, notNullValue());
+        assertThat(business.categories, notNullValue());
+
+        business.categories.forEach(this::checkCategory);
+        checkCoordinate(business.coordinates);
+        checkAddress(business.location);
     }
     
     private void checkCategory(Category category)

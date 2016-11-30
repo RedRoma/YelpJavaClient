@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tech.redroma.yelp;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.net.URL;
 import org.slf4j.Logger;
@@ -34,6 +35,9 @@ public class Resources
 {
 
     private final static Logger LOG = LoggerFactory.getLogger(Resources.class);
+
+    static final Gson GSON = new GsonBuilder()
+        .create();
 
     public static String loadResource(String name) throws IOException
     {

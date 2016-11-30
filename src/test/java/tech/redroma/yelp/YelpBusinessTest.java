@@ -86,24 +86,35 @@ public class YelpBusinessTest
         assertThat(instance.distance, notNullValue());
         assertThat(instance.categories, notNullValue());
         
-        instance.categories.forEach(this::testCategory);
-        testCoordinate(instance.coordinates);
+        instance.categories.forEach(this::checkCategory);
+        checkCoordinate(instance.coordinates);
+        checkAddress(instance.location);
     }
     
-    private void testCategory(YelpBusiness.Category category)
+    private void checkCategory(YelpBusiness.Category category)
     {
         assertThat(category, notNullValue());
         assertThat(category.alias, not(isEmptyOrNullString()));
         assertThat(category.title, not(isEmptyOrNullString()));
     }
 
-    private void testCoordinate(Coordinate coordinate)
+    private void checkCoordinate(Coordinate coordinate)
     {
         assertThat(coordinate, notNullValue());
         checkThat(coordinate.latitude)
             .is(validLatitude());
         checkThat(coordinate.longitude)
             .is(validLongitude());
+    }
+    
+    private void checkAddress(Address address)
+    {
+        assertThat(address, notNullValue());
+        assertThat(address.address1, not(isEmptyOrNullString()));
+        assertThat(address.city, not(isEmptyOrNullString()));
+        assertThat(address.country, not(isEmptyOrNullString()));
+        assertThat(address.state, not(isEmptyOrNullString()));
+        assertThat(address.zipCode, not(isEmptyOrNullString()));
     }
     
     @Test

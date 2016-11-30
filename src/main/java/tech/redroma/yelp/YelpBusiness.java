@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tech.redroma.yelp;
 
 import com.google.gson.annotations.SerializedName;
@@ -27,8 +26,9 @@ import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
 /**
  * Represents a Yelp Business JSON Object, as documented in the Yelp API.
- * 
- * @see <a href="https://www.yelp.com/developers/documentation/v3/business_search">https://www.yelp.com/developers/documentation/v3/business_search</a>
+ *
+ * @see
+ * <a href="https://www.yelp.com/developers/documentation/v3/business_search">https://www.yelp.com/developers/documentation/v3/business_search</a>
  * @author SirWellington
  */
 @Pojo
@@ -38,26 +38,28 @@ public class YelpBusiness
 {
 
     public String id;
-    
+
     public String name;
-    
+
     public String url;
-    
+
     public int rating;
-    
+
     public String phone;
-    
+
     public Boolean isClosed;
-    
+
     public List<Category> categories;
-    
+
     public int reviewCount;
-    
+
     public Coordinate coordinates;
-    
+
+    public Address location;
+
     @SerializedName("image_url")
     public String imageURL;
-    
+
     @Optional
     public Double distance;
 
@@ -74,6 +76,7 @@ public class YelpBusiness
         hash = 37 * hash + Objects.hashCode(this.categories);
         hash = 37 * hash + this.reviewCount;
         hash = 37 * hash + Objects.hashCode(this.coordinates);
+        hash = 37 * hash + Objects.hashCode(this.location);
         hash = 37 * hash + Objects.hashCode(this.imageURL);
         hash = 37 * hash + Objects.hashCode(this.distance);
         return hash;
@@ -135,11 +138,21 @@ public class YelpBusiness
         {
             return false;
         }
+        if (!Objects.equals(this.location, other.location))
+        {
+            return false;
+        }
         if (!Objects.equals(this.distance, other.distance))
         {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "YelpBusiness{" + "id=" + id + ", name=" + name + ", url=" + url + ", rating=" + rating + ", phone=" + phone + ", isClosed=" + isClosed + ", categories=" + categories + ", reviewCount=" + reviewCount + ", coordinates=" + coordinates + ", location=" + location + ", imageURL=" + imageURL + ", distance=" + distance + '}';
     }
 
     @Pojo
@@ -191,90 +204,6 @@ public class YelpBusiness
         public String toString()
         {
             return "Category{" + "alias=" + alias + ", title=" + title + '}';
-        }
-
-    }
-
-
-    @Pojo
-    @Mutable
-    @ThreadUnsafe
-    public static class Address
-    {
-
-        public String city;
-        public String state;
-        public String country;
-        public String address1;
-        public String address2;
-        public String address3;
-        public String zipCode;
-
-        @Override
-        public int hashCode()
-        {
-            int hash = 5;
-            hash = 83 * hash + Objects.hashCode(this.city);
-            hash = 83 * hash + Objects.hashCode(this.state);
-            hash = 83 * hash + Objects.hashCode(this.country);
-            hash = 83 * hash + Objects.hashCode(this.address1);
-            hash = 83 * hash + Objects.hashCode(this.address2);
-            hash = 83 * hash + Objects.hashCode(this.address3);
-            hash = 83 * hash + Objects.hashCode(this.zipCode);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-            if (obj == null)
-            {
-                return false;
-            }
-            if (getClass() != obj.getClass())
-            {
-                return false;
-            }
-            final Address other = (Address) obj;
-            if (!Objects.equals(this.city, other.city))
-            {
-                return false;
-            }
-            if (!Objects.equals(this.state, other.state))
-            {
-                return false;
-            }
-            if (!Objects.equals(this.country, other.country))
-            {
-                return false;
-            }
-            if (!Objects.equals(this.address1, other.address1))
-            {
-                return false;
-            }
-            if (!Objects.equals(this.address2, other.address2))
-            {
-                return false;
-            }
-            if (!Objects.equals(this.address3, other.address3))
-            {
-                return false;
-            }
-            if (!Objects.equals(this.zipCode, other.zipCode))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "Address{" + "city=" + city + ", state=" + state + ", country=" + country + ", address1=" + address1 + ", address2=" + address2 + ", address3=" + address3 + ", zipCode=" + zipCode + '}';
         }
 
     }

@@ -12,6 +12,11 @@
     <description>
         A simple Java Client for interfacing with the Yelp API.
     </description>
+    
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
     <organization>
         <name>RedRoma, Inc.</name>
@@ -372,5 +377,4 @@
 
         </profile>
     </profiles>
-
 </project>

@@ -16,6 +16,8 @@
 
 package tech.redroma.yelp;
 
+import com.google.gson.JsonElement;
+import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,11 +31,13 @@ import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static tech.redroma.yelp.Resources.GSON;
 import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLatitude;
 import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLongitude;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
-import static tech.sirwellington.alchemy.generator.NumberGenerators.doubles;
+import static tech.sirwellington.alchemy.generator.GeolocationGenerators.latitudes;
+import static tech.sirwellington.alchemy.generator.GeolocationGenerators.longitudes;
 
 /**
  *
@@ -61,19 +65,23 @@ public class YelpBusinessTest
 
     private void setupData()
     {
-        double latitude = one(doubles(-90, 90));
-        double longitude = one(doubles(-180, 180));
-        instance.coordinates.latitude = latitude;
-        instance.coordinates.longitude = longitude;
+        instance.coordinates.latitude = one(latitudes());
+        instance.coordinates.longitude = one(longitudes());
+        
+        first.coordinates.latitude = one(latitudes());
+        first.coordinates.longitude = one(longitudes());
+        
+        second.coordinates.latitude = one(latitudes());
+        second.coordinates.longitude = one(longitudes());
     }
 
     @DontRepeat
     @Test
-    public void testInstance()
+    public void testInstanceIsNotNull()
     {
         assertThat(instance, notNullValue());
     }
-
+    
     @Test
     public void testInstanceHasAllData()
     {
@@ -141,6 +149,26 @@ public class YelpBusinessTest
     {
         assertThat(first.hashCode(), is(first.hashCode()));
         assertThat(first.hashCode(), not(second.hashCode()));
+    }
+    
+    @Repeat(25)
+    @Test
+    public void testSerialization()
+    {
+        JsonElement json = GSON.toJsonTree(instance);
+        assertThat(json, notNullValue());
+        assertThat(json.isJsonObject(), is(true));
+    }
+    
+    @DontRepeat
+    @Test
+    public void testDeserialization() throws IOException
+    {
+        String json = Resources.loadResource("business.json");
+        
+        YelpBusiness result = GSON.fromJson(json, YelpBusiness.class);
+        assertThat(result, notNullValue());
+        checkBusiness(result);
     }
 
 }

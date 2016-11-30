@@ -18,6 +18,7 @@
 package tech.redroma.yelp;
 
 
+import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
@@ -38,6 +39,7 @@ public class Address
     public String address1;
     public String address2;
     public String address3;
+    @SerializedName("zip_code")
     public String zipCode;
 
     @Override

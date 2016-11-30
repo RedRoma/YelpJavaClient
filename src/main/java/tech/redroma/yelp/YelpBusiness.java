@@ -47,6 +47,7 @@ public class YelpBusiness
 
     public String phone;
 
+    @SerializedName("is_closed")
     public Boolean isClosed;
 
     public List<Category> categories;

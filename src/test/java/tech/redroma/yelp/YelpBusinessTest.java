@@ -41,17 +41,18 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.doubles;
  */
 @Repeat(10)
 @RunWith(AlchemyTestRunner.class)
-public class YelpBusinessTest 
+public class YelpBusinessTest
 {
+
     @GeneratePojo
     private YelpBusiness instance;
-    
+
     @GeneratePojo
     private YelpBusiness first;
-    
+
     @GeneratePojo
     private YelpBusiness second;
-    
+
     @Before
     public void setUp()
     {
@@ -65,15 +66,14 @@ public class YelpBusinessTest
         instance.coordinates.latitude = latitude;
         instance.coordinates.longitude = longitude;
     }
-    
-    
+
     @DontRepeat
     @Test
     public void testInstance()
     {
         assertThat(instance, notNullValue());
     }
-    
+
     @Test
     public void testInstanceHasAllData()
     {
@@ -81,7 +81,7 @@ public class YelpBusinessTest
         checkBusiness(first);
         checkBusiness(second);
     }
-    
+
     private void checkBusiness(YelpBusiness business)
     {
         assertThat(business.id, not(isEmptyOrNullString()));
@@ -97,7 +97,7 @@ public class YelpBusinessTest
         checkCoordinate(business.coordinates);
         checkAddress(business.location);
     }
-    
+
     private void checkCategory(Category category)
     {
         assertThat(category, notNullValue());
@@ -113,7 +113,7 @@ public class YelpBusinessTest
         checkThat(coordinate.longitude)
             .is(validLongitude());
     }
-    
+
     private void checkAddress(Address address)
     {
         assertThat(address, notNullValue());
@@ -123,19 +123,19 @@ public class YelpBusinessTest
         assertThat(address.state, not(isEmptyOrNullString()));
         assertThat(address.zipCode, not(isEmptyOrNullString()));
     }
-    
+
     @Test
     public void testEqualsWhenNotEqual()
     {
         assertThat(first, not(second));
     }
-    
+
     @Test
     public void testEqualsWhenEquals()
     {
         assertThat(first, is(first));
     }
-    
+
     @Test
     public void testHashCode()
     {

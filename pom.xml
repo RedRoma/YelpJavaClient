@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>tech.redroma.yelp</groupId>
+    <artifactId>yelp-api</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>YelpAPI</name>
+    <packaging>jar</packaging>
+
+    <url>https://github.com/RedRoma/YelpJavaClient</url>
+    <description>
+        A simple Java Client for interfacing with the Yelp API.
+    </description>
+
+    <organization>
+        <name>RedRoma, Inc.</name>
+        <url>http://RedRoma.tech/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Wellington Moreno</name>
+            <email>wellington@redroma.tech</email>
+            <id>SirWellington</id>
+            <organizationUrl>https://github.com/RedRoma</organizationUrl>
+            <roles>
+                <role>owner</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/RedRoma/YelpJavaClient/issues</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:RedRoma/YelpJavaClient.git</connection>
+        <developerConnection>scm:git:git@github.com:RedRoma/YelpJavaClient.git</developerConnection>
+        <url>git@github.com:RedRoma/YelpJavaClient.git</url>
+    </scm>
+
+
+    <inceptionYear>2016</inceptionYear>
+
+    <prerequisites>
+        <maven>3.0.3</maven>
+    </prerequisites>
+    
+    
+    <!--REPOSITORIES-->
+    <distributionManagement>
+
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+
+    </distributionManagement>
+
+    <repositories>
+
+        <repository>
+            <id>ossrh-snapshot</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+
+    </repositories>
+
+
+    <!-- END OF POM METADATA -->
+
+    <dependencies>
+        
+        <!--=======================-->
+        <!--UNIT TESTING-->
+        <!--=======================-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!--=======================-->
+        <!--ALCHEMY-->
+        <!--=======================-->
+        <dependency>
+            <groupId>tech.sirwellington.alchemy</groupId>
+            <artifactId>alchemy-annotations</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.sirwellington.alchemy</groupId>
+            <artifactId>alchemy-arguments</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.sirwellington.alchemy</groupId>
+            <artifactId>alchemy-collections</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.sirwellington.alchemy</groupId>
+            <artifactId>alchemy-generator</artifactId>
+            <version>1.5</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.sirwellington.alchemy</groupId>
+            <artifactId>alchemy-http</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.sirwellington.alchemy</groupId>
+            <artifactId>alchemy-http-mock</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.sirwellington.alchemy</groupId>
+            <artifactId>alchemy-test</artifactId>
+            <version>1.5</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <!--=======================-->
+        <!--LOGGING-->
+        <!--=======================-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
+        </dependency>
+
+        <!--Disables Logging during unit testing-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>1.7.21</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--=======================-->
+        <!--GUAVA-->
+        <!--=======================-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
+
+
+        <!--=======================-->
+        <!--GSON-->
+        <!--=======================-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+
+        <!--=======================-->
+        <!--GUICE-->
+        <!--=======================-->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            
+            <!--Download Javadoc Stylesheet-->
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <executions>
+                    <execution>
+                        <id>download-javadoc-stylesheet</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://raw.githubusercontent.com/SirWellington/alchemy/master/javadoc-style-sheet.css</url>
+                            <outputDirectory>${project.build.directory}/resources/css</outputDirectory>
+                            <failOnError>false</failOnError>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--Javadoc-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <linksource>true</linksource>
+                    <links>
+                        <link>http://docs.oracle.com/javase/8/docs/api/</link>
+                    </links>
+                    <stylesheetfile>${project.build.directory}/resources/css/javadoc-style-sheet.css</stylesheetfile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--Sources-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!--Code Coverage-->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.7.201606060606</version>
+                <configuration>
+                    <excludes>
+                        <!--Exclude Exceptions-->
+                        <exclude>**/*Exception.*</exclude>
+                    </excludes>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>default-report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+
+                        <configuration>
+                            <rules>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+        </plugins>
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>release</id>
+
+            <build>
+                <plugins>
+
+                    <!--Code Signing-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--Release Plugin-->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+        </profile>
+    </profiles>
+
+</project>

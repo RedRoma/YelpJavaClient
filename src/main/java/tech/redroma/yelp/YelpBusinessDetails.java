@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2016 RedRoma, Inc..
  *
@@ -66,6 +67,113 @@ public class YelpBusinessDetails
     public Coordinate coordinates;
 
     public Address location;
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + Objects.hashCode(this.imageURL);
+        hash = 29 * hash + Objects.hashCode(this.isClaimed);
+        hash = 29 * hash + Objects.hashCode(this.isClosed);
+        hash = 29 * hash + Objects.hashCode(this.url);
+        hash = 29 * hash + Objects.hashCode(this.price);
+        hash = 29 * hash + this.rating;
+        hash = 29 * hash + this.reviewCount;
+        hash = 29 * hash + Objects.hashCode(this.phone);
+        hash = 29 * hash + Objects.hashCode(this.photosURLS);
+        hash = 29 * hash + Objects.hashCode(this.hours);
+        hash = 29 * hash + Objects.hashCode(this.categories);
+        hash = 29 * hash + Objects.hashCode(this.coordinates);
+        hash = 29 * hash + Objects.hashCode(this.location);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final YelpBusinessDetails other = (YelpBusinessDetails) obj;
+        if (this.rating != other.rating)
+        {
+            return false;
+        }
+        if (this.reviewCount != other.reviewCount)
+        {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.imageURL, other.imageURL))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.url, other.url))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.price, other.price))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.phone, other.phone))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.isClaimed, other.isClaimed))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.isClosed, other.isClosed))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.photosURLS, other.photosURLS))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.hours, other.hours))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.categories, other.categories))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.coordinates, other.coordinates))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "YelpBusinessDetails{" + "id=" + id + ", name=" + name + ", imageURL=" + imageURL + ", isClaimed=" + isClaimed + ", isClosed=" + isClosed + ", url=" + url + ", price=" + price + ", rating=" + rating + ", reviewCount=" + reviewCount + ", phone=" + phone + ", photosURLS=" + photosURLS + ", hours=" + hours + ", categories=" + categories + ", coordinates=" + coordinates + ", location=" + location + '}';
+    }
 
     @Pojo
     @ThreadUnsafe

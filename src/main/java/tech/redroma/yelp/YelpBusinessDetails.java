@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tech.redroma.yelp;
 
 import com.google.gson.annotations.SerializedName;
@@ -51,7 +50,7 @@ public class YelpBusinessDetails
 
     public String price;
 
-    public int rating;
+    public double rating;
 
     public int reviewCount;
 
@@ -60,7 +59,7 @@ public class YelpBusinessDetails
     @SerializedName("photos")
     public List<String> photosURLS;
 
-    public Hours hours;
+    public List<Hours> hours;
 
     public List<Category> categories;
 
@@ -72,21 +71,21 @@ public class YelpBusinessDetails
     public int hashCode()
     {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.id);
-        hash = 29 * hash + Objects.hashCode(this.name);
-        hash = 29 * hash + Objects.hashCode(this.imageURL);
-        hash = 29 * hash + Objects.hashCode(this.isClaimed);
-        hash = 29 * hash + Objects.hashCode(this.isClosed);
-        hash = 29 * hash + Objects.hashCode(this.url);
-        hash = 29 * hash + Objects.hashCode(this.price);
-        hash = 29 * hash + this.rating;
-        hash = 29 * hash + this.reviewCount;
-        hash = 29 * hash + Objects.hashCode(this.phone);
-        hash = 29 * hash + Objects.hashCode(this.photosURLS);
-        hash = 29 * hash + Objects.hashCode(this.hours);
-        hash = 29 * hash + Objects.hashCode(this.categories);
-        hash = 29 * hash + Objects.hashCode(this.coordinates);
-        hash = 29 * hash + Objects.hashCode(this.location);
+        hash = 89 * hash + Objects.hashCode(this.id);
+        hash = 89 * hash + Objects.hashCode(this.name);
+        hash = 89 * hash + Objects.hashCode(this.imageURL);
+        hash = 89 * hash + Objects.hashCode(this.isClaimed);
+        hash = 89 * hash + Objects.hashCode(this.isClosed);
+        hash = 89 * hash + Objects.hashCode(this.url);
+        hash = 89 * hash + Objects.hashCode(this.price);
+        hash = 89 * hash + (int) (Double.doubleToLongBits(this.rating) ^ (Double.doubleToLongBits(this.rating) >>> 32));
+        hash = 89 * hash + this.reviewCount;
+        hash = 89 * hash + Objects.hashCode(this.phone);
+        hash = 89 * hash + Objects.hashCode(this.photosURLS);
+        hash = 89 * hash + Objects.hashCode(this.hours);
+        hash = 89 * hash + Objects.hashCode(this.categories);
+        hash = 89 * hash + Objects.hashCode(this.coordinates);
+        hash = 89 * hash + Objects.hashCode(this.location);
         return hash;
     }
 
@@ -181,17 +180,13 @@ public class YelpBusinessDetails
     public static class Hours
     {
 
-        public Type hoursType;
+        @SerializedName("hours_type")
+        public String hoursType;
 
         @SerializedName("is_open_now")
         public Boolean isOpenNow;
 
         public List<OpenTimes> open;
-
-        public enum Type
-        {
-            REGULAR
-        }
 
         public static class OpenTimes
         {
@@ -282,7 +277,7 @@ public class YelpBusinessDetails
                 return false;
             }
             final Hours other = (Hours) obj;
-            if (this.hoursType != other.hoursType)
+            if (!Objects.equals(this.hoursType, other.hoursType))
             {
                 return false;
             }

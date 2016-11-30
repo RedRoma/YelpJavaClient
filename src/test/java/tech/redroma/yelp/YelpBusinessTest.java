@@ -97,7 +97,7 @@ public class YelpBusinessTest
         assertThat(category.title, not(isEmptyOrNullString()));
     }
 
-    private void testCoordinate(YelpBusiness.Coordinate coordinate)
+    private void testCoordinate(Coordinate coordinate)
     {
         assertThat(coordinate, notNullValue());
         checkThat(coordinate.latitude)

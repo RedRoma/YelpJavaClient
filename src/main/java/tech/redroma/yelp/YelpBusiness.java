@@ -195,58 +195,6 @@ public class YelpBusiness
 
     }
 
-    @Pojo
-    @Mutable
-    @ThreadUnsafe
-    public static class Coordinate
-    {
-
-        double latitude;
-        double longitude;
-
-        @Override
-        public int hashCode()
-        {
-            int hash = 7;
-            hash = 59 * hash + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
-            hash = 59 * hash + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-            if (obj == null)
-            {
-                return false;
-            }
-            if (getClass() != obj.getClass())
-            {
-                return false;
-            }
-            final Coordinate other = (Coordinate) obj;
-            if (Double.doubleToLongBits(this.latitude) != Double.doubleToLongBits(other.latitude))
-            {
-                return false;
-            }
-            if (Double.doubleToLongBits(this.longitude) != Double.doubleToLongBits(other.longitude))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "Coordinate{" + "latitude=" + latitude + ", longitude=" + longitude + '}';
-        }
-
-    }
 
     @Pojo
     @Mutable

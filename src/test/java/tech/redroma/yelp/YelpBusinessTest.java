@@ -91,7 +91,7 @@ public class YelpBusinessTest
         checkAddress(instance.location);
     }
     
-    private void checkCategory(YelpBusiness.Category category)
+    private void checkCategory(Category category)
     {
         assertThat(category, notNullValue());
         assertThat(category.alias, not(isEmptyOrNullString()));

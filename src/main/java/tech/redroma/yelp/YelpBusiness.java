@@ -155,57 +155,5 @@ public class YelpBusiness
         return "YelpBusiness{" + "id=" + id + ", name=" + name + ", url=" + url + ", rating=" + rating + ", phone=" + phone + ", isClosed=" + isClosed + ", categories=" + categories + ", reviewCount=" + reviewCount + ", coordinates=" + coordinates + ", location=" + location + ", imageURL=" + imageURL + ", distance=" + distance + '}';
     }
 
-    @Pojo
-    @Mutable
-    @ThreadUnsafe
-    public static class Category
-    {
-
-        public String alias;
-        public String title;
-
-        @Override
-        public int hashCode()
-        {
-            int hash = 5;
-            hash = 61 * hash + Objects.hashCode(this.alias);
-            hash = 61 * hash + Objects.hashCode(this.title);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-            if (obj == null)
-            {
-                return false;
-            }
-            if (getClass() != obj.getClass())
-            {
-                return false;
-            }
-            final Category other = (Category) obj;
-            if (!Objects.equals(this.alias, other.alias))
-            {
-                return false;
-            }
-            if (!Objects.equals(this.title, other.title))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "Category{" + "alias=" + alias + ", title=" + title + '}';
-        }
-
-    }
 
 }

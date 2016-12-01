@@ -43,6 +43,7 @@ import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.g
 import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.lessThanOrEqualTo;
 import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.positiveInteger;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringWithLength;
 
 /**
  * Use to make search requests to the Yelp API. Use {@link #newBuilder() } to create a request object.
@@ -86,9 +87,6 @@ public final class YelpSearchRequest
     @Optional
     private final String categories;
 
-    /**
-     *
-     */
     @Optional
     private final String locale;
 
@@ -599,17 +597,24 @@ public final class YelpSearchRequest
          * @param locale The locale (cannot be empty).
          * @return
          * @throws IllegalArgumentException
+         * @see Locale.Locales
          * @see
          * <a href="https://www.yelp.com/developers/documentation/v3/supported_locales">https://www.yelp.com/developers/documentation/v3/supported_locales</a>
          */
         @Optional
-        public Builder withLocale(@NonEmpty String locale) throws IllegalArgumentException
+        public Builder withLocale(@Required Locale locale) throws IllegalArgumentException
         {
             checkThat(locale)
                 .usingMessage("locale cannot be empty")
-                .is(nonEmptyString());
-
-            this.locale = locale;
+                .is(notNull());
+            
+            String code = locale.code();
+            checkThat(code)
+                .usingMessage("Country Code cannot be empty")
+                .is(nonEmptyString())
+                .usingMessage("Country must take the form: {language code}_{country code}")
+                .is(stringWithLength(5));
+            this.locale = locale.code();
             return this;
         }
 

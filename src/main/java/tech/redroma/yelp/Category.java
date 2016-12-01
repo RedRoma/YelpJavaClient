@@ -39,6 +39,14 @@ public class Category
     public String alias;
     public String title;
 
+    /**
+     * Creates a Category object with the given alias and title.
+     * 
+     * @param alias
+     * @param title
+     * 
+     * @return 
+     */
     public Category with(@NonEmpty String alias, @NonEmpty String title)
     {
         checkThat(alias, title)

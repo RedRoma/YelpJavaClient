@@ -40,8 +40,15 @@ public class YelpSearchQuery
     private String searchTerm;
 
     /**
-     * Required if either latitude or longitude is not provided. Specifies the combination of: + Address + Neighborhood + City +
-     * State + Zip + Country
+     * Required if either latitude or longitude is not provided. Specifies the combination of:
+     * <pre>
+     * + Address
+     * + Neighborhood
+     * + City
+     * + State
+     * + Zip
+     * + Country
+     * </pre>
      */
     private String location;
 

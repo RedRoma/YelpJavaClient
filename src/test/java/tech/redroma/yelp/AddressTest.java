@@ -27,7 +27,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -84,6 +86,30 @@ public class AddressTest
     {
         assertThat(first.hashCode(), is(first.hashCode()));
         assertThat(first.hashCode(), not(second.hashCode()));
+    }
+
+    @Test
+    public void testHasAddress2()
+    {
+        assertTrue(instance.hasAddress2());
+        instance.address2 = null;
+        assertFalse(instance.hasAddress2());
+    }
+
+    @Test
+    public void testHasAddress3()
+    {
+        assertTrue(instance.hasAddress3());
+        instance.address3 = null;
+        assertFalse(instance.hasAddress3());
+    }
+
+    @Test
+    public void testHasZipCode()
+    {
+        assertTrue(instance.hasZipCode());
+        instance.zipCode = null;
+        assertFalse(instance.hasZipCode());
     }
 
 }

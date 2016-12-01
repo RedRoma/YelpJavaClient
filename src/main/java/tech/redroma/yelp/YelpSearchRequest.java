@@ -45,8 +45,13 @@ import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.p
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 /**
- *
+ * Use to make search requests to the Yelp API. Use {@link #newBuilder() } to create a request object.
+ * <p>
+ * Official Yelp documentation can be found <a href="https://www.yelp.com/developers/documentation/v3/business_search">here</a>.
+ * 
  * @author SirWellington
+ * @see YelpSearchRequest.Builder
+ * @see <a href="https://www.yelp.com/developers/documentation/v3/business_search">https://www.yelp.com/developers/documentation/v3/business_search</a>
  */
 @Pojo
 @Immutable
@@ -54,6 +59,11 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.n
 @BuilderPattern(role = PRODUCT)
 public final class YelpSearchRequest
 {
+    
+    public static YelpSearchRequest.Builder newBuilder()
+    {
+        return Builder.newInstance();
+    }
 
     @Optional
     private final String searchTerm;

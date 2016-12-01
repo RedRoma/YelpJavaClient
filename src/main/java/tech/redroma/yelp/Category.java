@@ -19,9 +19,13 @@ package tech.redroma.yelp;
 
 
 import java.util.Objects;
+import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
+
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 /**
  *
@@ -35,6 +39,18 @@ public class Category
     public String alias;
     public String title;
 
+    public Category with(@NonEmpty String alias, @NonEmpty String title)
+    {
+        checkThat(alias, title)
+            .are(nonEmptyString());
+        
+        Category category = new Category();
+        category.alias = alias;
+        category.title = title;
+        
+        return category;
+    }
+    
     @Override
     public int hashCode()
     {

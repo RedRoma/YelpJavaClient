@@ -31,6 +31,7 @@ import tech.sirwellington.alchemy.annotations.concurrency.ThreadSafe;
 import tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
+import static java.util.stream.Collectors.joining;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.BUILDER;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.PRODUCT;
 import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
@@ -38,11 +39,10 @@ import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull
 import static tech.sirwellington.alchemy.arguments.assertions.CollectionAssertions.nonEmptyList;
 import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLatitude;
 import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLongitude;
+import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.greaterThanOrEqualTo;
 import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.lessThanOrEqualTo;
 import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.positiveInteger;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
-import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
-import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.lessThanOrEqualTo;
 
 /**
  *
@@ -320,7 +320,21 @@ public final class YelpSearchRequest
         {
             this.number = number;
         }
+    }
+    
+    public enum Attribute
+    {
+        HOT_AND_NEW("hot_and_new"),
+        DEALS("deals")
+        ;
+        
+        private final String text;
 
+        private Attribute(String text)
+        {
+            this.text = text;
+        }
+        
     }
 
     @BuilderPattern(role = BUILDER)
@@ -455,6 +469,7 @@ public final class YelpSearchRequest
 
             String joined = categories.stream()
                 .map(c -> c.alias)
+                .distinct()
                 .collect(Collectors.joining(","));
 
             this.categories = joined;
@@ -492,6 +507,75 @@ public final class YelpSearchRequest
             this.offset = offset;
             return this;
         }
+        
+        public Builder withSortBy(@Required SortType sortType) throws IllegalArgumentException
+        {
+            checkThat(sortType).is(notNull());
+            
+            this.sortBy = sortType.text;
+            return this;
+        }
+        
+        public Builder withPrices(@Required PricingLevel first, PricingLevel...others) throws IllegalArgumentException
+        {
+            checkThat(first).is(notNull());
+            
+            List<PricingLevel> pricingLevels = Lists.createFrom(first, others);
+            return withPrices(pricingLevels);
+        }
+        
+        public Builder withPrices(@NonEmpty List<PricingLevel> pricingLevels) throws IllegalArgumentException
+        {
+            checkThat(pricingLevels)
+                .is(notNull())
+                .is(nonEmptyList());
+            
+            String priceLevels = pricingLevels.stream()
+                .map(p -> p.number)
+                .map(String::valueOf)
+                .distinct()
+                .collect(Collectors.joining(", "));
+            
+            this.prices = priceLevels;
+            return this;
+        }
+        
+        public Builder lookingForOpenNow()
+        {
+            this.isOpenNow = true;
+            return this;
+        }
+        
+        public Builder withBusinessesOpenAt(int hour) throws IllegalArgumentException
+        {
+            checkThat(hour)
+                .is(greaterThanOrEqualTo(0))
+                .is(lessThanOrEqualTo(24));
+            
+            this.openAt = hour;
+            return this;
+        }
+        
+        public Builder withAttribute(@Required Attribute attribute) throws IllegalArgumentException
+        {
+            checkThat(attribute).is(notNull());
+            
+            this.attributes = attribute.text;
+            return this;
+        }
+        
+        public Builder withAttributes(@NonEmpty List<Attribute> attributes)
+        {
+            checkThat(attributes).is(nonEmptyList());
+            
+            this.attributes = attributes.stream()
+                .map(a -> a.text)
+                .distinct()
+                .collect(joining(","));
+            
+            return this;
+        }
+        
 
         public YelpSearchRequest build() throws YelpBadArgumentException
         {

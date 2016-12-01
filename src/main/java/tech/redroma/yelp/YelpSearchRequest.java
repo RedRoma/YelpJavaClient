@@ -203,8 +203,6 @@ public final class YelpSearchRequest
         return attributes;
     }
 
-
-
     @Override
     public int hashCode()
     {

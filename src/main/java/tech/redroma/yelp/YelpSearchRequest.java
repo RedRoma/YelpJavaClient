@@ -55,24 +55,9 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.n
 public final class YelpSearchRequest
 {
 
-    /*
-     * Optional search term (e.g. "food", "restaurants"). If the term isn't included we search everything. The term keyword also
-     * accepts business names such as "Starbucks".
-     */
     @Optional
     private final String searchTerm;
 
-    /**
-     * Required if either latitude or longitude is not provided. Specifies the combination of:
-     * <pre>
-     * + Address
-     * + Neighborhood
-     * + City
-     * + State
-     * + Zip
-     * + Country
-     * </pre>
-     */
     private final String location;
 
     /**
@@ -85,77 +70,35 @@ public final class YelpSearchRequest
      */
     private final Double longitude;
 
-    /**
-     * Search radius, in meters. If the value is too large, a {@link YelpAreaTooLargeException} is thrown.
-     */
     @Optional
     private final Integer radius;
 
-    /**
-     * categories to filter the serach results with. See the list of supported categories. The category filter can be a ist of
-     * comma-delimited categories. For example, "bars, french", will filter Bars and French. The category identifier should be
-     * used (e.g. "discgolf", instead of "Disc Golf").
-     */
     @Optional
     private final String categories;
 
     /**
-     * Specify the locale to return the business information in.
      *
-     * @see
-     * <a href="https://www.yelp.com/developers/documentation/v3/supported_locales">https://www.yelp.com/developers/documentation/v3/supported_locales</a>
      */
     @Optional
     private final String locale;
 
-    /**
-     * Specify the maximum number of businesses to return. By default, it will return 20. The maximum is 50.
-     */
     @Optional
     private final Integer limit;
 
-    /**
-     * Offset the list of returned businesses by the amount. For, example, if you have seen results 1-10, specify '10' to see the
-     * next 11-20.
-     */
     @Optional
     private final Integer offset;
 
-    /**
-     * Sort the results by one of these modes: {@link SortType}.
-     *
-     */
     @Optional
     private final String sortBy;
 
-    /**
-     * Pricing levels to filter the search result with.
-     */
     @Optional
     private final String prices;
 
-    /**
-     * Defaults to false When set tot rue, only return the businesses open now. Notice that {@link #openNow} and {@link #openAt}
-     * cannot be used together.
-     */
     @Optional
     private final Boolean openNow;
-
-    /**
-     * An integer representing the Unix timestamp in the same time-zone of the search location.
-     *
-     * If specified, it will return businesses that are open at the given time. Note that {@link #openNow} and {@link #openAt}
-     * cannot be used together.
-     */
     @Optional
     private final Integer openAt;
 
-    /**
-     * Additional filters to search businesses. you can use multiple attribute filters at the same time by providing a
-     * comma-separated string. For example: {@code "attribute1,attribute2"}.
-     * <p>
-     * Currently the valid values are: {@code "hot_and_new" & "deals"}.
-     */
     @Optional
     private final String attributes;
 
@@ -189,6 +132,78 @@ public final class YelpSearchRequest
         this.openAt = openAt;
         this.attributes = attributes;
     }
+
+    public String getSearchTerm()
+    {
+        return searchTerm;
+    }
+
+    public String getLocation()
+    {
+        return location;
+    }
+
+    public Double getLatitude()
+    {
+        return latitude;
+    }
+
+    public Double getLongitude()
+    {
+        return longitude;
+    }
+
+    public Integer getRadius()
+    {
+        return radius;
+    }
+
+    public String getCategories()
+    {
+        return categories;
+    }
+
+    public String getLocale()
+    {
+        return locale;
+    }
+
+    public Integer getLimit()
+    {
+        return limit;
+    }
+
+    public Integer getOffset()
+    {
+        return offset;
+    }
+
+    public String getSortBy()
+    {
+        return sortBy;
+    }
+
+    public String getPrices()
+    {
+        return prices;
+    }
+
+    public Boolean getOpenNow()
+    {
+        return openNow;
+    }
+
+    public Integer getOpenAt()
+    {
+        return openAt;
+    }
+
+    public String getAttributes()
+    {
+        return attributes;
+    }
+
+
 
     @Override
     public int hashCode()
@@ -341,7 +356,16 @@ public final class YelpSearchRequest
     public final static class Builder
     {
 
-        private final static int MAX_LIMIT = 50;
+        /**
+         * The maximum limit that can used per query.
+         */
+        public final static int MAX_LIMIT = 50;
+        
+        /**
+         * The widest radius that can be used in a Search.
+         * Set to 40,000 meters, or 25 miles.
+         */
+        public final static int MAX_RADIUS_IN_METERS = 40_000;
 
         private String searchTerm;
         private String location;
@@ -358,34 +382,55 @@ public final class YelpSearchRequest
         private Integer openAt;
         private String attributes;
 
+        /**
+         * Creates a new instance of the Builder.
+         * @return 
+         */
         public static Builder newInstance()
         {
             return new Builder();
         }
 
-        public static Builder from(@Required YelpSearchRequest query) throws IllegalArgumentException
+        /**
+         * Creates a new instance of the Builder using the data in the existing {@link YelpSearchRequest}.
+         * 
+         * @param request Initiates the builder with the data in this variable. It cannot be null.
+         * @return
+         * 
+         * @throws IllegalArgumentException If the argument is null
+         */
+        public static Builder from(@Required YelpSearchRequest request) throws IllegalArgumentException
         {
-            checkThat(query).is(notNull());
+            checkThat(request).is(notNull());
 
             Builder builder = Builder.newInstance();
-            builder.searchTerm = query.searchTerm;
-            builder.locale = query.locale;
-            builder.latitude = query.latitude;
-            builder.longitude = query.longitude;
-            builder.radiusInMeters = query.radius;
-            builder.categories = query.categories;
-            builder.location = query.location;
-            builder.limit = query.limit;
-            builder.offset = query.offset;
-            builder.sortBy = query.sortBy;
-            builder.prices = query.prices;
-            builder.isOpenNow = query.openNow;
-            builder.openAt = query.openAt;
-            builder.attributes = query.attributes;
+            builder.searchTerm = request.searchTerm;
+            builder.locale = request.locale;
+            builder.latitude = request.latitude;
+            builder.longitude = request.longitude;
+            builder.radiusInMeters = request.radius;
+            builder.categories = request.categories;
+            builder.location = request.location;
+            builder.limit = request.limit;
+            builder.offset = request.offset;
+            builder.sortBy = request.sortBy;
+            builder.prices = request.prices;
+            builder.isOpenNow = request.openNow;
+            builder.openAt = request.openAt;
+            builder.attributes = request.attributes;
 
             return builder;
         }
 
+        /**
+         * Optional. Search term (e.g. "food", "restaurants"). If the term isn't included we search everything. The term keyword
+         * also accepts business names such as "Starbucks".
+         *
+         * @param searchTerm The search term to use in the request.
+         * @return
+         * @throws IllegalArgumentException *
+         */
+        @Optional
         public Builder withSearchTerm(@NonEmpty String searchTerm) throws IllegalArgumentException
         {
             checkThat(searchTerm).is(nonEmptyString());
@@ -393,7 +438,24 @@ public final class YelpSearchRequest
             this.searchTerm = searchTerm;
             return this;
         }
-
+        
+        /**
+         * Required if either latitude or longitude is not provided. 
+         * Specifies the combination of:
+         * <pre>
+         * + Address
+         * + Neighborhood
+         * + City
+         * + State
+         * + Zip
+         * + Country
+         * </pre>
+         *
+         * @param address
+         * @return
+         * @throws IllegalArgumentException 
+         */
+        @Required
         public Builder withLocation(@Required Address address) throws IllegalArgumentException
         {
             checkThat(address)
@@ -425,6 +487,16 @@ public final class YelpSearchRequest
             return this;
         }
 
+        /**
+         * Specifies the latitude and longitude of the location you want to search near by.
+         * Required if {@linkplain #withLocation(tech.redroma.yelp.Address) Location} is not 
+         * provided.
+         * 
+         * @param coordinate Cannot be empty, and must contain valid longitude and latitude;
+         * @return
+         * @throws IllegalArgumentException 
+         */
+        @Required
         public Builder withCoordinate(@Required Coordinate coordinate) throws IllegalArgumentException
         {
             checkThat(coordinate)
@@ -442,15 +514,38 @@ public final class YelpSearchRequest
             return this;
         }
 
-        public Builder withRadiusInMeters(@Positive int radius) throws IllegalArgumentException
+        /**
+         * Search radius, in meters. If the value is too large, a {@link YelpAreaTooLargeException} is thrown.
+         *
+         * @param radius
+         * @return
+         * @throws IllegalArgumentException 
+         */
+        @Optional
+        public Builder withRadiusInMeters(@Positive int radius) throws IllegalArgumentException, YelpAreaTooLargeException
         {
             checkThat(radius)
-                .is(positiveInteger());
+                .is(positiveInteger())
+                .throwing(YelpAreaTooLargeException.class)
+                .usingMessage("search radius cannot exceed: " + radius)
+                .is(lessThanOrEqualTo(MAX_RADIUS_IN_METERS));
 
             this.radiusInMeters = radius;
             return this;
         }
 
+        /**
+
+         *
+         * @param first The first category (required)
+         * @param rest A Varargs of the rest.
+         * @return
+         * @throws IllegalArgumentException If the first is null.
+         * 
+         * @see Category
+         * @see #withCategories(java.util.List) 
+         */
+        @Optional
         public Builder withCategories(@Required Category first, Category... rest) throws IllegalArgumentException
         {
             checkThat(first)
@@ -461,6 +556,20 @@ public final class YelpSearchRequest
             return withCategories(categoriesList);
         }
 
+        /**
+         * Categories to filter the search results with. 
+         * See the {@linkplain Category list of supported categories}.
+         * <p>
+         * The category filter can be a list of
+         * comma-delimited categories. For example, "bars, french", will filter Bars and French. The category identifier should be
+         * used (e.g. "discgolf", instead of "Disc Golf").
+         * 
+         * @param categories
+         * @return
+         * @throws IllegalArgumentException 
+         * @see #withCategories(tech.redroma.yelp.Category, tech.redroma.yelp.Category...) 
+         */
+        @Optional
         public Builder withCategories(@NonEmpty List<Category> categories) throws IllegalArgumentException
         {
             checkThat(categories)
@@ -476,6 +585,16 @@ public final class YelpSearchRequest
             return this;
         }
 
+        /**
+         * Specify the locale to return the business information in.
+         *
+         * @param locale The locale (cannot be empty).
+         * @return
+         * @throws IllegalArgumentException
+         * @see
+         * <a href="https://www.yelp.com/developers/documentation/v3/supported_locales">https://www.yelp.com/developers/documentation/v3/supported_locales</a>
+         */
+        @Optional
         public Builder withLocale(@NonEmpty String locale) throws IllegalArgumentException
         {
             checkThat(locale)
@@ -486,6 +605,15 @@ public final class YelpSearchRequest
             return this;
         }
 
+        /**
+         * Specify the maximum number of businesses to return. By default, it will return 20.
+         * Cannot exceed {@link #MAX_LIMIT}.
+         *
+         * @param limit Must be {@code > 0} and cannot exceed {@link #MAX_LIMIT}.
+         * @return
+         * @throws IllegalArgumentException 
+         */
+        @Optional
         public Builder withLimit(@Positive int limit) throws IllegalArgumentException
         {
             checkThat(limit)
@@ -498,6 +626,17 @@ public final class YelpSearchRequest
             return this;
         }
 
+        /**
+         * Offset the list of returned business by this amount.
+         * <p>
+         * For example, if you have seen results 1-10, setting this to '10'
+         * will return the next 11-20.
+         * 
+         * @param offset Must be {@code > 0}
+         * @return
+         * @throws IllegalArgumentException 
+         */
+        @Optional
         public Builder withOffset(@Positive int offset) throws IllegalArgumentException
         {
             checkThat(offset)
@@ -508,6 +647,14 @@ public final class YelpSearchRequest
             return this;
         }
         
+        /**
+         * Sort the results by one of these modes: {@link SortType}.
+         *
+         * @param sortType The type of sorting order desired. Cannot be null.
+         * @return
+         * @throws IllegalArgumentException 
+         */
+        @Optional
         public Builder withSortBy(@Required SortType sortType) throws IllegalArgumentException
         {
             checkThat(sortType).is(notNull());
@@ -516,6 +663,16 @@ public final class YelpSearchRequest
             return this;
         }
         
+        /**
+         * Pricing levels to filter the search result with.
+         *
+         * @param first The first pricing level, cannot be null.
+         * @param others Varargs allowing you to specify other pricing levels.
+         * @return
+         * @throws IllegalArgumentException 
+         * @see #withPrices(java.util.List) 
+         */
+        @Optional
         public Builder withPrices(@Required PricingLevel first, PricingLevel...others) throws IllegalArgumentException
         {
             checkThat(first).is(notNull());
@@ -524,6 +681,15 @@ public final class YelpSearchRequest
             return withPrices(pricingLevels);
         }
         
+        /**
+         * Filters results to include businesses at the specified pricing points.
+         *
+         * @param pricingLevels The pricing levels to the filter the search results with (cannot be empty).
+         * @return
+         * @throws IllegalArgumentException 
+         * @see #withPrices(tech.redroma.yelp.YelpSearchRequest.PricingLevel, tech.redroma.yelp.YelpSearchRequest.PricingLevel...) 
+         */
+        @Optional
         public Builder withPrices(@NonEmpty List<PricingLevel> pricingLevels) throws IllegalArgumentException
         {
             checkThat(pricingLevels)
@@ -540,12 +706,30 @@ public final class YelpSearchRequest
             return this;
         }
         
+        /**
+         * Returns results that only includes businesses that are open now.
+         * <p>
+         * Notice that {@link #withBusinessesOpenAt(int) } and {@link #lookingForOpenNow() } cannot be used together.
+         *
+         * @return
+         */
+        @Optional
         public Builder lookingForOpenNow()
         {
             this.isOpenNow = true;
             return this;
         }
         
+        /**
+         * Returns results taht only include businesses that are open at the specified time.
+         * <p>
+         * Notice that {@link #withBusinessesOpenAt(int) } and {@link #lookingForOpenNow() } cannot be used together.
+         *
+         * @param hour The Unix timestamp in the same time-zone of the search location.
+         * @return
+         * @throws IllegalArgumentException 
+         */
+        @Optional
         public Builder withBusinessesOpenAt(int hour) throws IllegalArgumentException
         {
             checkThat(hour)
@@ -556,15 +740,33 @@ public final class YelpSearchRequest
             return this;
         }
         
-        public Builder withAttribute(@Required Attribute attribute) throws IllegalArgumentException
+        /**
+         * Convenience method for {@link #withAttributes(java.util.List) }.
+         * 
+         * @param first The first Attribute is required.
+         * @param rest The rest are optional
+         * @return
+         * @throws IllegalArgumentException 
+         */
+        public Builder withAttribute(@Required Attribute first, Attribute...rest) throws IllegalArgumentException
         {
-            checkThat(attribute).is(notNull());
+            checkThat(first).is(notNull());
             
-            this.attributes = attribute.text;
-            return this;
+            List<Attribute> attributes = Lists.createFrom(first, rest);
+            return withAttributes(attributes);
         }
         
-        public Builder withAttributes(@NonEmpty List<Attribute> attributes)
+        /**
+         * Additional filters to search businesses. 
+         * <p>
+         * See {@link Attribute} for possible values.
+         * 
+         * @param attributes The attributes to filter search results with. Cannot be empty.
+         * @throws IllegalArgumentException
+         * @return 
+         * @see #withAttribute(tech.redroma.yelp.YelpSearchRequest.Attribute, tech.redroma.yelp.YelpSearchRequest.Attribute...) 
+         */
+        public Builder withAttributes(@NonEmpty List<Attribute> attributes) throws IllegalArgumentException
         {
             checkThat(attributes).is(nonEmptyList());
             
@@ -576,7 +778,14 @@ public final class YelpSearchRequest
             return this;
         }
         
-
+        /**
+         * Builds the final {@link YelpSearchRequest} from the parameters stored so far. Note that a Search Request requires at
+         * least a {@linkplain #withLocation(tech.redroma.yelp.Address) Location} or a
+         * {@linkplain #withCoordinate(tech.redroma.yelp.Coordinate) Coordinate}.
+         *
+         * @return
+         * @throws YelpBadArgumentException
+         */
         public YelpSearchRequest build() throws YelpBadArgumentException
         {
             checkThatLocationIsSet();
@@ -609,7 +818,7 @@ public final class YelpSearchRequest
                 return;
             }
 
-            throw new YelpBadArgumentException("Either location ");
+            throw new YelpBadArgumentException("Either a location or a coordinate must be set.");
         }
     }
 

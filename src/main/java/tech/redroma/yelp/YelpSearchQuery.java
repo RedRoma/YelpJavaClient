@@ -16,6 +16,7 @@
 
 package tech.redroma.yelp;
 
+import java.util.Objects;
 import tech.redroma.yelp.exceptions.YelpAreaTooLargeException;
 import tech.sirwellington.alchemy.annotations.arguments.Optional;
 import tech.sirwellington.alchemy.annotations.concurrency.Immutable;
@@ -126,6 +127,103 @@ public class YelpSearchQuery
      */
     @Optional
     private Boolean openAt;
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.searchTerm);
+        hash = 79 * hash + Objects.hashCode(this.location);
+        hash = 79 * hash + Objects.hashCode(this.latitude);
+        hash = 79 * hash + Objects.hashCode(this.longitude);
+        hash = 79 * hash + this.radius;
+        hash = 79 * hash + Objects.hashCode(this.categories);
+        hash = 79 * hash + Objects.hashCode(this.locale);
+        hash = 79 * hash + this.limit;
+        hash = 79 * hash + this.offset;
+        hash = 79 * hash + Objects.hashCode(this.sortBy);
+        hash = 79 * hash + Objects.hashCode(this.price);
+        hash = 79 * hash + Objects.hashCode(this.openNow);
+        hash = 79 * hash + Objects.hashCode(this.openAt);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final YelpSearchQuery other = (YelpSearchQuery) obj;
+        if (this.radius != other.radius)
+        {
+            return false;
+        }
+        if (this.limit != other.limit)
+        {
+            return false;
+        }
+        if (this.offset != other.offset)
+        {
+            return false;
+        }
+        if (!Objects.equals(this.searchTerm, other.searchTerm))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.categories, other.categories))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.locale, other.locale))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.price, other.price))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.latitude, other.latitude))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.longitude, other.longitude))
+        {
+            return false;
+        }
+        if (this.sortBy != other.sortBy)
+        {
+            return false;
+        }
+        if (!Objects.equals(this.openNow, other.openNow))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.openAt, other.openAt))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "YelpSearchQuery{" + "searchTerm=" + searchTerm + ", location=" + location + ", latitude=" + latitude + ", longitude=" + longitude + ", radius=" + radius + ", categories=" + categories + ", locale=" + locale + ", limit=" + limit + ", offset=" + offset + ", sortBy=" + sortBy + ", price=" + price + ", openNow=" + openNow + ", openAt=" + openAt + '}';
+    }
 
     public enum SortType
     {

@@ -21,7 +21,10 @@ import tech.redroma.yelp.exceptions.YelpAreaTooLargeException;
 import tech.sirwellington.alchemy.annotations.arguments.Optional;
 import tech.sirwellington.alchemy.annotations.concurrency.Immutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadSafe;
+import tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
+
+import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.PRODUCT;
 
 /**
  *
@@ -30,7 +33,8 @@ import tech.sirwellington.alchemy.annotations.objects.Pojo;
 @Pojo
 @Immutable
 @ThreadSafe
-public class YelpSearchQuery
+@BuilderPattern(role = PRODUCT)
+public final class YelpSearchQuery
 {
 
     /*
@@ -38,7 +42,7 @@ public class YelpSearchQuery
      * accepts business names such as "Starbucks".
      */
     @Optional
-    private String searchTerm;
+    private final String searchTerm;
 
     /**
      * Required if either latitude or longitude is not provided. Specifies the combination of:
@@ -51,23 +55,23 @@ public class YelpSearchQuery
      * + Country
      * </pre>
      */
-    private String location;
+    private final String location;
 
     /**
      * The latitude of the location you want to search near by. Required if location is not provided.
      */
-    private Double latitude;
+    private final Double latitude;
 
     /**
      * Longitude of the location you want to search near by. required if the location is not provided.
      */
-    private Double longitude;
+    private final Double longitude;
 
     /**
      * Search radius, in meters. If the value is too large, a {@link YelpAreaTooLargeException} is thrown.
      */
     @Optional
-    private int radius;
+    private final int radius;
 
     /**
      * categories to filter the serach results with. See the list of supported categories. The category filter can be a ist of
@@ -75,7 +79,7 @@ public class YelpSearchQuery
      * used (e.g. "discgolf", instead of "Disc Golf").
      */
     @Optional
-    private String categories;
+    private final String categories;
 
     /**
      * Specify the locale to return the business information in.
@@ -84,40 +88,40 @@ public class YelpSearchQuery
      * <a href="https://www.yelp.com/developers/documentation/v3/supported_locales">https://www.yelp.com/developers/documentation/v3/supported_locales</a>
      */
     @Optional
-    private String locale;
+    private final String locale;
 
     /**
      * Specify the maximum number of businesses to return. By default, it will return 20. The maximum is 50.
      */
     @Optional
-    private int limit;
+    private final int limit;
 
     /**
      * Offset the list of returned businesses by the amount. For, example, if you have seen results 1-10, specify '10' to see the
      * next 11-20.
      */
     @Optional
-    private int offset;
+    private final int offset;
 
     /**
      * Sort the results by one of these modes:
      *
      */
     @Optional
-    private SortType sortBy;
+    private final SortType sortBy;
 
     /**
      * Pricing levels to filter the search result with.
      */
     @Optional
-    private String price;
+    private final String price;
 
     /**
      * Defaults to false When set tot rue, only return the businesses open now. Notice that {@link #openNow} and {@link #openAt}
      * cannot be used together.
      */
     @Optional
-    private Boolean openNow;
+    private final Boolean openNow;
 
     /**
      * An integer representing the Unix timestamp in the same time-zone of the search location.
@@ -126,7 +130,36 @@ public class YelpSearchQuery
      * cannot be used together.
      */
     @Optional
-    private Boolean openAt;
+    private final Boolean openAt;
+
+    YelpSearchQuery(String searchTerm,
+                    String location,
+                    Double latitude,
+                    Double longitude,
+                    int radius,
+                    String categories,
+                    String locale,
+                    int limit,
+                    int offset,
+                    SortType sortBy,
+                    String price,
+                    Boolean openNow,
+                    Boolean openAt)
+    {
+        this.searchTerm = searchTerm;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.radius = radius;
+        this.categories = categories;
+        this.locale = locale;
+        this.limit = limit;
+        this.offset = offset;
+        this.sortBy = sortBy;
+        this.price = price;
+        this.openNow = openNow;
+        this.openAt = openAt;
+    }
 
     @Override
     public int hashCode()

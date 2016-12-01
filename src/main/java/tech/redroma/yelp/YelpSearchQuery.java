@@ -16,15 +16,31 @@
 
 package tech.redroma.yelp;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import sir.wellington.alchemy.collections.lists.Lists;
 import tech.redroma.yelp.exceptions.YelpAreaTooLargeException;
+import tech.redroma.yelp.exceptions.YelpBadArgumentException;
+import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Optional;
+import tech.sirwellington.alchemy.annotations.arguments.Positive;
+import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.concurrency.Immutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadSafe;
 import tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
+import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.BUILDER;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.PRODUCT;
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
+import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull;
+import static tech.sirwellington.alchemy.arguments.assertions.CollectionAssertions.nonEmptyList;
+import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLatitude;
+import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLongitude;
+import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.lessThanOrEqualTo;
+import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.positiveInteger;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 /**
  *
@@ -71,7 +87,7 @@ public final class YelpSearchQuery
      * Search radius, in meters. If the value is too large, a {@link YelpAreaTooLargeException} is thrown.
      */
     @Optional
-    private final int radius;
+    private final Integer radius;
 
     /**
      * categories to filter the serach results with. See the list of supported categories. The category filter can be a ist of
@@ -94,27 +110,27 @@ public final class YelpSearchQuery
      * Specify the maximum number of businesses to return. By default, it will return 20. The maximum is 50.
      */
     @Optional
-    private final int limit;
+    private final Integer limit;
 
     /**
      * Offset the list of returned businesses by the amount. For, example, if you have seen results 1-10, specify '10' to see the
      * next 11-20.
      */
     @Optional
-    private final int offset;
+    private final Integer offset;
 
     /**
-     * Sort the results by one of these modes:
+     * Sort the results by one of these modes: {@link SortType}.
      *
      */
     @Optional
-    private final SortType sortBy;
+    private final String sortBy;
 
     /**
      * Pricing levels to filter the search result with.
      */
     @Optional
-    private final String price;
+    private final String prices;
 
     /**
      * Defaults to false When set tot rue, only return the businesses open now. Notice that {@link #openNow} and {@link #openAt}
@@ -130,21 +146,31 @@ public final class YelpSearchQuery
      * cannot be used together.
      */
     @Optional
-    private final Boolean openAt;
+    private final Integer openAt;
+
+    /**
+     * Additional filters to search businesses. you can use multiple attribute filters at the same time by providing a
+     * comma-separated string. For example: {@code "attribute1,attribute2"}.
+     * <p>
+     * Currently the valid values are: {@code "hot_and_new" & "deals"}.
+     */
+    @Optional
+    private final String attributes;
 
     YelpSearchQuery(String searchTerm,
                     String location,
                     Double latitude,
                     Double longitude,
-                    int radius,
+                    Integer radius,
                     String categories,
                     String locale,
-                    int limit,
-                    int offset,
-                    SortType sortBy,
+                    Integer limit,
+                    Integer offset,
+                    String sortBy,
                     String price,
                     Boolean openNow,
-                    Boolean openAt)
+                    Integer openAt,
+                    String attributes)
     {
         this.searchTerm = searchTerm;
         this.location = location;
@@ -156,28 +182,30 @@ public final class YelpSearchQuery
         this.limit = limit;
         this.offset = offset;
         this.sortBy = sortBy;
-        this.price = price;
+        this.prices = price;
         this.openNow = openNow;
         this.openAt = openAt;
+        this.attributes = attributes;
     }
 
     @Override
     public int hashCode()
     {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.searchTerm);
-        hash = 79 * hash + Objects.hashCode(this.location);
-        hash = 79 * hash + Objects.hashCode(this.latitude);
-        hash = 79 * hash + Objects.hashCode(this.longitude);
-        hash = 79 * hash + this.radius;
-        hash = 79 * hash + Objects.hashCode(this.categories);
-        hash = 79 * hash + Objects.hashCode(this.locale);
-        hash = 79 * hash + this.limit;
-        hash = 79 * hash + this.offset;
-        hash = 79 * hash + Objects.hashCode(this.sortBy);
-        hash = 79 * hash + Objects.hashCode(this.price);
-        hash = 79 * hash + Objects.hashCode(this.openNow);
-        hash = 79 * hash + Objects.hashCode(this.openAt);
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.searchTerm);
+        hash = 17 * hash + Objects.hashCode(this.location);
+        hash = 17 * hash + Objects.hashCode(this.latitude);
+        hash = 17 * hash + Objects.hashCode(this.longitude);
+        hash = 17 * hash + Objects.hashCode(this.radius);
+        hash = 17 * hash + Objects.hashCode(this.categories);
+        hash = 17 * hash + Objects.hashCode(this.locale);
+        hash = 17 * hash + Objects.hashCode(this.limit);
+        hash = 17 * hash + Objects.hashCode(this.offset);
+        hash = 17 * hash + Objects.hashCode(this.sortBy);
+        hash = 17 * hash + Objects.hashCode(this.prices);
+        hash = 17 * hash + Objects.hashCode(this.openNow);
+        hash = 17 * hash + Objects.hashCode(this.openAt);
+        hash = 17 * hash + Objects.hashCode(this.attributes);
         return hash;
     }
 
@@ -197,18 +225,6 @@ public final class YelpSearchQuery
             return false;
         }
         final YelpSearchQuery other = (YelpSearchQuery) obj;
-        if (this.radius != other.radius)
-        {
-            return false;
-        }
-        if (this.limit != other.limit)
-        {
-            return false;
-        }
-        if (this.offset != other.offset)
-        {
-            return false;
-        }
         if (!Objects.equals(this.searchTerm, other.searchTerm))
         {
             return false;
@@ -225,7 +241,15 @@ public final class YelpSearchQuery
         {
             return false;
         }
-        if (!Objects.equals(this.price, other.price))
+        if (!Objects.equals(this.sortBy, other.sortBy))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.prices, other.prices))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.attributes, other.attributes))
         {
             return false;
         }
@@ -237,7 +261,15 @@ public final class YelpSearchQuery
         {
             return false;
         }
-        if (this.sortBy != other.sortBy)
+        if (!Objects.equals(this.radius, other.radius))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.limit, other.limit))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.offset, other.offset))
         {
             return false;
         }
@@ -255,7 +287,7 @@ public final class YelpSearchQuery
     @Override
     public String toString()
     {
-        return "YelpSearchQuery{" + "searchTerm=" + searchTerm + ", location=" + location + ", latitude=" + latitude + ", longitude=" + longitude + ", radius=" + radius + ", categories=" + categories + ", locale=" + locale + ", limit=" + limit + ", offset=" + offset + ", sortBy=" + sortBy + ", price=" + price + ", openNow=" + openNow + ", openAt=" + openAt + '}';
+        return "YelpSearchQuery{" + "searchTerm=" + searchTerm + ", location=" + location + ", latitude=" + latitude + ", longitude=" + longitude + ", radius=" + radius + ", categories=" + categories + ", locale=" + locale + ", limit=" + limit + ", offset=" + offset + ", sortBy=" + sortBy + ", price=" + prices + ", openNow=" + openNow + ", openAt=" + openAt + '}';
     }
 
     public enum SortType
@@ -289,22 +321,210 @@ public final class YelpSearchQuery
 
     }
 
-    public static class Builder
+    @BuilderPattern(role = BUILDER)
+    public final static class Builder
     {
 
-        private String term;
+        private final static int MAX_LIMIT = 50;
+
+        private String searchTerm;
         private String location;
-        private Coordinate coordinate;
-        private double radiusInMeters;
+        private Double latitude;
+        private Double longitude;
+        private Integer radiusInMeters;
         private String categories;
         private String locale;
-        private int offset;
+        private Integer limit;
+        private Integer offset;
         private String sortBy;
-        private String price;
-        private boolean isOpenNow;
-        private int openAt;
+        private String prices;
+        private Boolean isOpenNow;
+        private Integer openAt;
         private String attributes;
 
+        public static Builder newInstance()
+        {
+            return new Builder();
+        }
+
+        public static Builder from(@Required YelpSearchQuery query) throws IllegalArgumentException
+        {
+            checkThat(query).is(notNull());
+
+            Builder builder = Builder.newInstance();
+            builder.searchTerm = query.searchTerm;
+            builder.locale = query.locale;
+            builder.latitude = query.latitude;
+            builder.longitude = query.longitude;
+            builder.radiusInMeters = query.radius;
+            builder.categories = query.categories;
+            builder.location = query.location;
+            builder.limit = query.limit;
+            builder.offset = query.offset;
+            builder.sortBy = query.sortBy;
+            builder.prices = query.prices;
+            builder.isOpenNow = query.openNow;
+            builder.openAt = query.openAt;
+            builder.attributes = query.attributes;
+
+            return builder;
+        }
+
+        public Builder withSearchTerm(@NonEmpty String searchTerm) throws IllegalArgumentException
+        {
+            checkThat(searchTerm).is(nonEmptyString());
+
+            this.searchTerm = searchTerm;
+            return this;
+        }
+
+        public Builder withLocation(@Required Address address) throws IllegalArgumentException
+        {
+            checkThat(address)
+                .usingMessage("location cannot be null")
+                .is(notNull());
+
+            String text = address.address1;
+
+            if (address.hasAddress2())
+            {
+                text += " " + address.address2;
+            }
+
+            if (address.hasAddress3())
+            {
+                text += " " + address.address3;
+            }
+
+            text += " " + address.city;
+            text += " " + address.state;
+            text += " " + address.country;
+
+            if (address.hasZipCode())
+            {
+                text += " " + address.zipCode;
+            }
+
+            this.location = text;
+            return this;
+        }
+
+        public Builder withCoordinate(@Required Coordinate coordinate) throws IllegalArgumentException
+        {
+            checkThat(coordinate)
+                .usingMessage("coordinate cannot be null")
+                .is(notNull());
+
+            double lat = coordinate.latitude;
+            double lon = coordinate.longitude;
+
+            checkThat(lat).is(validLatitude());
+            checkThat(lon).is(validLongitude());
+
+            this.latitude = lat;
+            this.longitude = lon;
+            return this;
+        }
+
+        public Builder withRadiusInMeters(@Positive int radius) throws IllegalArgumentException
+        {
+            checkThat(radius)
+                .is(positiveInteger());
+
+            this.radiusInMeters = radius;
+            return this;
+        }
+
+        public Builder withCategories(@Required Category first, Category... rest) throws IllegalArgumentException
+        {
+            checkThat(first)
+                .usingMessage("category is null")
+                .is(notNull());
+
+            List<Category> categoriesList = Lists.createFrom(first, rest);
+            return withCategories(categoriesList);
+        }
+
+        public Builder withCategories(@NonEmpty List<Category> categories) throws IllegalArgumentException
+        {
+            checkThat(categories)
+                .is(notNull())
+                .is(nonEmptyList());
+
+            String joined = categories.stream()
+                .map(c -> c.alias)
+                .collect(Collectors.joining(","));
+
+            this.categories = joined;
+            return this;
+        }
+
+        public Builder withLocale(@NonEmpty String locale) throws IllegalArgumentException
+        {
+            checkThat(locale)
+                .usingMessage("locale cannot be empty")
+                .is(nonEmptyString());
+
+            this.locale = locale;
+            return this;
+        }
+
+        public Builder withLimit(@Positive int limit) throws IllegalArgumentException
+        {
+            checkThat(limit)
+                .usingMessage("limit must be > 0")
+                .is(positiveInteger())
+                .usingMessage("limit cannot exceed 50")
+                .is(lessThanOrEqualTo(MAX_LIMIT));
+
+            this.limit = limit;
+            return this;
+        }
+
+        public Builder withOffset(@Positive int offset) throws IllegalArgumentException
+        {
+            checkThat(offset)
+                .usingMessage("offset must be > 0")
+                .is(positiveInteger());
+
+            this.offset = offset;
+            return this;
+        }
+
+        public YelpSearchQuery build() throws YelpBadArgumentException
+        {
+            checkThatLocationIsSet();
+
+            return new YelpSearchQuery(searchTerm,
+                                       location,
+                                       latitude,
+                                       longitude,
+                                       radiusInMeters,
+                                       categories,
+                                       locale,
+                                       limit,
+                                       offset,
+                                       sortBy,
+                                       prices,
+                                       isOpenNow,
+                                       openAt,
+                                       attributes);
+        }
+
+        private void checkThatLocationIsSet()
+        {
+            if (location != null)
+            {
+                return;
+            }
+
+            if (longitude != null && latitude != null)
+            {
+                return;
+            }
+
+            throw new YelpBadArgumentException("Either location ");
+        }
     }
 
 }

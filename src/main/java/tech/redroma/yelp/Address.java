@@ -27,7 +27,9 @@ import tech.sirwellington.alchemy.annotations.objects.Pojo;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
- *
+ * A physical location. Can be {@linkplain YelpBusiness#location returned by Yelp} or
+ * {@linkplain YelpAPI#searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) used in a Search request}.
+ * 
  * @author SirWellington
  */
 @Pojo 

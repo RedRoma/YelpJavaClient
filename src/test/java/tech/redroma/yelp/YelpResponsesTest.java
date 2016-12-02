@@ -35,11 +35,11 @@ import static org.junit.Assert.assertThat;
  */
 @Repeat(10)
 @RunWith(AlchemyTestRunner.class)
-public class ResponsesIT
+public class YelpResponsesTest
 {
     
     @GeneratePojo
-    private Responses.SearchResponse searchResponse;
+    private YelpResponses.SearchResponse searchResponse;
     
     @Before
     public void setUp() throws Exception

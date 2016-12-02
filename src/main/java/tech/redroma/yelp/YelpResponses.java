@@ -30,10 +30,10 @@ import tech.sirwellington.alchemy.annotations.objects.Pojo;
  */
 @Internal
 @NonInstantiable
-final class Responses 
+final class YelpResponses 
 {
 
-    Responses() throws IllegalAccessException
+    YelpResponses() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate");
     }

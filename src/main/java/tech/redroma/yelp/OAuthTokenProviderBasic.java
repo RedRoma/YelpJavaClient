@@ -22,12 +22,12 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.Internal;
-import tech.sirwellington.alchemy.arguments.assertions.StringAssertions;
 
 import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 /**
- * Stores a permanent token and returns it on each call.
+ * Stores a permanent token and returns it on each call to {@link #getToken() }.
  * 
  * @author SirWellington
  */
@@ -40,7 +40,8 @@ final class OAuthTokenProviderBasic implements OAuthTokenProvider
 
     OAuthTokenProviderBasic(String token)
     {
-        checkThat(token).is(StringAssertions.nonEmptyString());
+        checkThat(token).is(nonEmptyString());
+        
         this.token = token;
     }
 

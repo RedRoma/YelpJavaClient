@@ -924,7 +924,7 @@ public final class YelpSearchRequest
         {
             if (openAt != null && isOpenNow != null)
             {
-                throw new IllegalArgumentException("You can use 'open_now' or 'open_at', but not both.");
+                throw new YelpBadArgumentException("You can use 'open_now' or 'open_at', but not both.");
             }
         }
     }

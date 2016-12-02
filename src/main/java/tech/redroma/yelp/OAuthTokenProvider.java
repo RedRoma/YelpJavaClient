@@ -65,7 +65,7 @@ public interface OAuthTokenProvider
     {
         checkThat(token).is(nonEmptyString());
 
-        return new Basic(token);
+        return new OAuthTokenProviderBasic(token);
     }
 
     /**
@@ -152,64 +152,9 @@ public interface OAuthTokenProvider
             .usingMessage("token is required")
             .is(nonEmptyString());
 
-        return new Basic(token);
+        return new OAuthTokenProviderBasic(token);
     }
 
-    static final class Basic implements OAuthTokenProvider
-    {
-
-        private final String token;
-
-        Basic(String token)
-        {
-            checkThat(token).is(nonEmptyString());
-            this.token = token;
-        }
-
-        @Override
-        public String getToken()
-        {
-            return token;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int hash = 7;
-            hash = 23 * hash + Objects.hashCode(this.token);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-            if (obj == null)
-            {
-                return false;
-            }
-            if (getClass() != obj.getClass())
-            {
-                return false;
-            }
-            final Basic other = (Basic) obj;
-            if (!Objects.equals(this.token, other.token))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "Basic{" + "token=" + token + '}';
-        }
-
-    }
 
     static final class OAuthObtainer implements OAuthTokenProvider
     {

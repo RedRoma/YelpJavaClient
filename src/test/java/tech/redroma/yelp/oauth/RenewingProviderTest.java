@@ -90,9 +90,8 @@ public class RenewingProviderTest
     private void setupData() throws Exception
     {
         authResponse = new JsonObject();
-        authResponse.addProperty(RenewingProvider.Keys.CLIENT_ID, cliendId);
-        authResponse.addProperty(RenewingProvider.Keys.CLIENT_SECRET, clientSecret);
-        authResponse.addProperty(RenewingProvider.Keys.GRANT_TYPE, "client_credentials");
+        authResponse.addProperty(RenewingProvider.Keys.EXPIRATION, expiration);
+        authResponse.addProperty(RenewingProvider.Keys.TOKEN, token);
     }
 
     private void setupMocks() throws Exception
@@ -108,6 +107,10 @@ public class RenewingProviderTest
     @Test
     public void testGetToken()
     {
+        String result = instance.getToken();
+        assertThat(result, is(token));
+        
+        AlchemyHttpMock.verifyAllRequestsMade(http);
     }
     
     @Test

@@ -24,8 +24,11 @@ import tech.redroma.yelp.exceptions.YelpExcetion;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
+import tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
 
+import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.BUILDER;
+import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.PRODUCT;
 import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull;
 import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.validURL;
@@ -38,6 +41,7 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.s
  * @author SirWellington
  * @see <a href= "https://www.yelp.com/developers/documentation/v3">Yelp API</a>
  */
+@BuilderPattern(role = PRODUCT)
 public interface YelpAPI 
 {
     /**
@@ -98,7 +102,8 @@ public interface YelpAPI
         return Builder.newInstance().build();
     }
     
-    static class Builder
+    @BuilderPattern(role = BUILDER)
+    static final class Builder
     {
         private static final String DEFAULT_BASE_URL = "https://api.yelp.com/v3";
        

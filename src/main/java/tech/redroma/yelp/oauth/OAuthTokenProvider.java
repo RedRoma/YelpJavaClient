@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package tech.redroma.yelp;
+package tech.redroma.yelp.oauth;
 
 import java.net.MalformedURLException;
 import java.net.URL;

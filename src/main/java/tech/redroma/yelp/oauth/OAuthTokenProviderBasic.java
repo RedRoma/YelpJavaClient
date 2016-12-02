@@ -15,7 +15,7 @@
  */
 
  
-package tech.redroma.yelp;
+package tech.redroma.yelp.oauth;
 
 
 import java.util.Objects;

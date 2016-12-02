@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package tech.redroma.yelp;
+package tech.redroma.yelp.oauth;
 
 import com.google.common.base.Strings;
 import com.google.gson.JsonElement;

@@ -38,10 +38,6 @@ public class Coordinate
     double latitude;
     double longitude;
 
-    public Coordinate()
-    {
-    }
-
     public Coordinate(double latitude, double longitude)
     {
         checkThat(latitude).is(validLatitude());
@@ -51,9 +47,26 @@ public class Coordinate
         this.longitude = longitude;
     }
 
+    /**
+     *
+     * @param latitude  A valid latitude
+     * @param longitude A valid longitude
+     * @return
+     * @throws IllegalArgumentException
+     */
     public static Coordinate of(double latitude, double longitude) throws IllegalArgumentException
     {
         return new Coordinate(latitude, longitude);
+    }
+    
+    public double getLatitude()
+    {
+        return latitude;
+    }
+
+    public double getLongitude()
+    {
+        return longitude;
     }
     
     @Override

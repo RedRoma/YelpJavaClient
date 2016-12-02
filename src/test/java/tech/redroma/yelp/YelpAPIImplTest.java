@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import tech.redroma.yelp.exceptions.YelpAuthenticationException;
 import tech.redroma.yelp.exceptions.YelpExcetion;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.generator.AlchemyGenerator;
@@ -38,6 +39,7 @@ import tech.sirwellington.alchemy.test.junit.runners.Repeat;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.CollectionGenerators.listOf;
@@ -168,7 +170,21 @@ public class YelpAPIImplTest
     @Test
     public void testGetBusinessDetailsWhenTokenInvalid() throws Exception
     {
+        HttpResponse fakeResponse = mock(HttpResponse.class);
+        when(fakeResponse.statusCode()).thenReturn(401);
+        Exception ex = new AlchemyHttpException(fakeResponse);
         
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .noBody()
+            .at(expectedGetBusinessDetailsURL)
+            .thenThrow(ex)
+            .build();
+        
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        assertThrows(() -> instance.getBusinessDetails(businessID))
+            .isInstanceOf(YelpAuthenticationException.class);
     }
     
     @Test

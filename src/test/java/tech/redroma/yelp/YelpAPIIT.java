@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sir.wellington.alchemy.collections.lists.Lists;
 import tech.sirwellington.alchemy.annotations.testing.IntegrationTest;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
 
@@ -75,6 +76,28 @@ public class YelpAPIIT
 
         List<YelpBusiness> results = yelp.searchForBusinesses(request);
         LOG.info("Found {} results for request: {}", results.size(), request);
+    }
+    
+    @Test
+    public void testGetBusinessDetails() throws Exception
+    {
+        if (yelp == null)
+        {
+            return;
+        }
+  
+        request = YelpSearchRequest.newBuilder()
+            .withSearchTerm("Grocery")
+            .withCoordinate(Coordinate.of(34.018363, -118.492343))
+            .withLimit(5)
+            .build();
+        
+        List<YelpBusiness> results = yelp.searchForBusinesses(request);
+        YelpBusiness business = Lists.oneOf(results);
+        
+        YelpBusinessDetails details = yelp.getBusinessDetails(business);
+        LOG.info("Found details for business: {}", business);
+        
     }
     
 }

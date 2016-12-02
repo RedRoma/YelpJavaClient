@@ -31,6 +31,7 @@ import tech.sirwellington.alchemy.annotations.concurrency.ThreadSafe;
 import tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.stream.Collectors.joining;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.BUILDER;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.PRODUCT;
@@ -104,6 +105,7 @@ public final class YelpSearchRequest
 
     @Optional
     private final Boolean openNow;
+    
     @Optional
     private final Integer openAt;
 
@@ -140,7 +142,77 @@ public final class YelpSearchRequest
         this.openAt = openAt;
         this.attributes = attributes;
     }
-
+    
+    public boolean hasSearchTerm()
+    {
+        return !isNullOrEmpty(searchTerm);
+    }
+    
+    public boolean hasLocation()
+    {
+        return !isNullOrEmpty(location);
+    }
+    
+    public boolean hasLatitude()
+    {
+        return latitude != null;
+    }
+    
+    public boolean hasLongitude()
+    {
+        return longitude != null;
+    }
+    
+    public boolean hasRadius()
+    {
+        return radius != null;
+    }
+    
+    public boolean hasCategories()
+    {
+        return !isNullOrEmpty(categories);
+    }
+    
+    public boolean hasLocale()
+    {
+        return !isNullOrEmpty(locale);
+    }
+    
+    public boolean hasLimit()
+    {
+        return limit != null && limit > 0;
+    }
+    
+    public boolean hasOffset()
+    {
+        return offset != null && offset > 0;
+    }
+    
+    public boolean hasSortBy()
+    {
+        return !isNullOrEmpty(sortBy);
+    }
+    
+    public boolean hasPrices()
+    {
+        return !isNullOrEmpty(prices);
+    }
+    
+    public boolean hasIsOpenNow()
+    {
+        return openNow != null;
+    }
+    
+    public boolean hasOpenAt()
+    {
+        return openAt != null;
+    }
+    
+    public boolean hasAttributes()
+    {
+        return !isNullOrEmpty(attributes);
+    }
+    
     public String getSearchTerm()
     {
         return searchTerm;

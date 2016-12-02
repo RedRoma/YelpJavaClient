@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.redroma.yelp.exceptions.YelpAuthenticationException;
 import tech.redroma.yelp.exceptions.YelpBadArgumentException;
 import tech.redroma.yelp.exceptions.YelpOperationFailedException;
 import tech.sirwellington.alchemy.annotations.access.Internal;
@@ -102,14 +103,20 @@ final class RenewingProvider implements OAuthTokenProvider
         }
         catch (AlchemyHttpException ex)
         {
-            HttpResponse yelpResponse = ex.getResponse();
-            int status = yelpResponse.statusCode();
-            
-            if (status == BAD_REQUEST)
+            LOG.error("Failed to obtain a OAuth Token from Yelp", ex);
+
+            if (ex.hasResponse())
             {
-                throw new YelpBadArgumentException("Client ID or Secret are incorrect: " + yelpResponse.body());
+                HttpResponse yelpResponse = ex.getResponse();
+
+                int status = yelpResponse.statusCode();
+
+                if (status == BAD_REQUEST)
+                {
+                    throw new YelpAuthenticationException("Client ID or Secret are incorrect: " + yelpResponse.body());
+                }
             }
-            
+
             throw new YelpOperationFailedException("Failed to get access token.", ex);
         }
         

@@ -22,9 +22,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import tech.redroma.yelp.exceptions.YelpAuthenticationException;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
+import tech.sirwellington.alchemy.http.HttpRequest;
+import tech.sirwellington.alchemy.http.HttpResponse;
+import tech.sirwellington.alchemy.http.exceptions.AlchemyHttpException;
 import tech.sirwellington.alchemy.http.mock.AlchemyHttpMock;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
+import tech.sirwellington.alchemy.test.junit.runners.DontRepeat;
 import tech.sirwellington.alchemy.test.junit.runners.GenerateInteger;
 import tech.sirwellington.alchemy.test.junit.runners.GenerateString;
 import tech.sirwellington.alchemy.test.junit.runners.GenerateURL;
@@ -34,6 +39,9 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThrows;
 import static tech.sirwellington.alchemy.test.junit.runners.GenerateInteger.Type.RANGE;
 import static tech.sirwellington.alchemy.test.junit.runners.GenerateString.Type.ALPHANUMERIC;
 import static tech.sirwellington.alchemy.test.junit.runners.GenerateString.Type.HEXADECIMAL;
@@ -111,6 +119,31 @@ public class RenewingProviderTest
         assertThat(result, is(token));
         
         AlchemyHttpMock.verifyAllRequestsMade(http);
+    }
+    
+    @DontRepeat
+    @Test
+    public void testGetTokenWhenAuthenticationError()
+    {
+        HttpRequest fakeRequest = mock(HttpRequest.class);
+        HttpResponse fakeResponse = mock(HttpResponse.class);
+        
+        when(fakeResponse.body()).thenReturn(authResponse);
+        when(fakeResponse.statusCode()).thenReturn(400);
+        
+        AlchemyHttpException ex = new AlchemyHttpException(fakeRequest, fakeResponse);
+        
+        http = AlchemyHttpMock.begin()
+            .whenPost()
+            .anyBody()
+            .at(authURL)
+            .thenThrow(ex)
+            .build();
+        
+        instance = new RenewingProvider(http, authURL, cliendId, clientSecret);
+        
+        assertThrows(() -> instance.getToken())
+            .isInstanceOf(YelpAuthenticationException.class);
     }
     
     @Test

@@ -89,6 +89,10 @@ public class YelpAPIImplTest
     
     private YelpAPIImpl instance;
     
+    private String expectedGetBusinessDetailsURL;
+    
+    private String expectedSearchURL;
+    
     @Before
     public void setUp() throws Exception
     {
@@ -111,6 +115,9 @@ public class YelpAPIImplTest
             .withSearchTerm(searchTerm)
             .withCoordinate(Coordinate.of(latitude, longitude))
             .build();
+        
+        expectedGetBusinessDetailsURL = baseURL + YelpAPIImpl.URLS.BUSINESSES + "/" + businessID;
+        expectedSearchURL = baseURL + YelpAPIImpl.URLS.BUSINESS_SEARCH;
     }
     
     private void setupMocks() throws Exception
@@ -125,12 +132,10 @@ public class YelpAPIImplTest
     @Test
     public void testGetBusinessDetails() throws Exception
     {
-        String expectedURL = baseURL + YelpAPIImpl.URLS.BUSINESSES + "/" + businessID;
-        
         http = AlchemyHttpMock.begin()
             .whenGet()
             .noBody()
-            .at(expectedURL)
+            .at(expectedGetBusinessDetailsURL)
             .thenReturnPOJO(businessDetails)
             .build();
         
@@ -144,13 +149,12 @@ public class YelpAPIImplTest
     @Test
     public void testGetBusinessDetailsWhenFails() throws Exception
     {
-        String expectedURL = baseURL + YelpAPIImpl.URLS.BUSINESSES + "/" + businessID;
         Exception ex = new AlchemyHttpException();
         
         http = AlchemyHttpMock.begin()
             .whenGet()
             .noBody()
-            .at(expectedURL)
+            .at(expectedGetBusinessDetailsURL)
             .thenThrow(ex)
             .build();
         
@@ -160,17 +164,20 @@ public class YelpAPIImplTest
             .isInstanceOf(YelpExcetion.class);
     }
     
+    @DontRepeat
+    @Test
+    public void testGetBusinessDetailsWhenTokenInvalid() throws Exception
+    {
+        
+    }
     
     @Test
     public void testSearchForBusinesses() throws Exception
     {
-        //We need a specific URL for each method, so a mock HTTP must be constructed
-        //For each.
-        String expectedURL = baseURL + YelpAPIImpl.URLS.BUSINESS_SEARCH;
         http = AlchemyHttpMock.begin()
             .whenGet()
             .anyBody()
-            .at(expectedURL)
+            .at(expectedSearchURL)
             .thenReturnResponse(httpResponse)
             .build();
         
@@ -185,16 +192,15 @@ public class YelpAPIImplTest
     @Test
     public void testSearchForBusinessesWhenFails() throws Exception
     {
-        String expectedURL = baseURL + YelpAPIImpl.URLS.BUSINESS_SEARCH;
-        
         Exception ex = new AlchemyHttpException();
         
         http = AlchemyHttpMock.begin()
             .whenGet()
             .anyBody()
-            .at(expectedURL)
+            .at(expectedSearchURL)
             .thenThrow(ex)
             .build();
+        
         instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
         
         assertThrows(() -> instance.searchForBusinesses(request))

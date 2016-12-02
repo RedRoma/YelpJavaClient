@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sir.wellington.alchemy.collections.lists.Lists;
 import tech.redroma.yelp.exceptions.YelpAuthenticationException;
 import tech.redroma.yelp.exceptions.YelpBadArgumentException;
 import tech.redroma.yelp.exceptions.YelpExcetion;
@@ -30,7 +31,6 @@ import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
 import tech.sirwellington.alchemy.http.AlchemyRequest;
-import tech.sirwellington.alchemy.http.HttpResponse;
 import tech.sirwellington.alchemy.http.exceptions.AlchemyHttpException;
 
 import static java.lang.String.format;
@@ -103,14 +103,11 @@ final class YelpAPIImpl implements YelpAPI
         
         String url = baseURL + URLS.BUSINESS_SEARCH;
         
+        YelpResponses.SearchResponse response;
         try
         {
-            HttpResponse response = httpRequest.at(url);
-            
-            List<YelpBusiness> results = response.bodyAsArrayOf(YelpBusiness.class);
-            
-            LOG.debug("Found {} businesses matching search request [{}]", results.size(), request);
-            return results;
+            response = httpRequest.expecting(YelpResponses.SearchResponse.class)
+                                  .at(url);
         }
         catch (AlchemyHttpException ex)
         {
@@ -131,6 +128,16 @@ final class YelpAPIImpl implements YelpAPI
             LOG.error("Failed to make search request at {}", url, ex);
             throw new YelpOperationFailedException("could not search Yelp at: " + url, ex);
         }
+
+        if (response == null)
+        {
+            LOG.warn("Received null response from Yelp at {} for request {}", url, request);
+        }
+        
+        List<YelpBusiness> results = Lists.nullToEmpty(response.businesses);
+        
+        LOG.info("Received {} results out of {} total for search: {}", results.size(), response.total, request);
+        return results;
     }
     
     private String createDetailUrlFor(String businessId)

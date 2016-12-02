@@ -26,6 +26,7 @@ import tech.sirwellington.alchemy.annotations.testing.IntegrationTest;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static tech.redroma.yelp.YelpSearchRequest.Builder.MAX_LIMIT;
 
 /**
  * Manually run this test to make sure your client key and secret work.
@@ -69,6 +70,7 @@ public class YelpAPIIT
         request = YelpSearchRequest.newBuilder()
             .withSearchTerm("Deli")
             .withCoordinate(Coordinate.of(34.018363, -118.492343))
+            .withLimit(MAX_LIMIT)
             .build();
 
         List<YelpBusiness> results = yelp.searchForBusinesses(request);

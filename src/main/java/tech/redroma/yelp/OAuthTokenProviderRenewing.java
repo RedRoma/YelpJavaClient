@@ -38,7 +38,9 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.n
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringWithLengthGreaterThan;
 
 /**
- *
+ * This {@link OAuthTokenProvider} retrieves an OAuth Token from the Yelp Authentication API
+ * using the given client_id and client_secret, ensuring it is never expired.
+ * 
  * @author SirWellington
  */
 @Internal

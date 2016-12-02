@@ -39,7 +39,9 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.s
 
 /**
  * The interface used to interact with <a href= "https://www.yelp.com/developers/documentation/v3">Yelp's Developer API</a>.
- * 
+ * <p>
+ * To create, see {@link #newInstance(java.lang.String, java.lang.String) } or {@link YelpAPI.Builder}.
+ *
  * @author SirWellington
  * @see <a href= "https://www.yelp.com/developers/documentation/v3">Yelp API</a>
  */
@@ -109,6 +111,9 @@ public interface YelpAPI
             .build();
     }
     
+    /**
+     * Use to create a more customized {@link YelpAPI}.
+     */
     @BuilderPattern(role = BUILDER)
     static final class Builder
     {

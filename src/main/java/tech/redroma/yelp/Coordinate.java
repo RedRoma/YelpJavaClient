@@ -22,6 +22,10 @@ import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
+import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLatitude;
+import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLongitude;
+
 /**
  *
  * @author SirWellington
@@ -34,6 +38,24 @@ public class Coordinate
     double latitude;
     double longitude;
 
+    public Coordinate()
+    {
+    }
+
+    public Coordinate(double latitude, double longitude)
+    {
+        checkThat(latitude).is(validLatitude());
+        checkThat(longitude).is(validLongitude());
+        
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public static Coordinate of(double latitude, double longitude) throws IllegalArgumentException
+    {
+        return new Coordinate(latitude, longitude);
+    }
+    
     @Override
     public int hashCode()
     {

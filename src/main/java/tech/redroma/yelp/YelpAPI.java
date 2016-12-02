@@ -19,6 +19,8 @@ package tech.redroma.yelp;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tech.redroma.yelp.exceptions.YelpBadArgumentException;
 import tech.redroma.yelp.exceptions.YelpExcetion;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
@@ -111,6 +113,7 @@ public interface YelpAPI
     static final class Builder
     {
         private static final String DEFAULT_BASE_URL = "https://api.yelp.com/v3";
+        private static final Logger LOG = LoggerFactory.getLogger(Builder.class);
        
         private OAuthTokenProvider oauthProvider;
         
@@ -119,6 +122,8 @@ public interface YelpAPI
         private AlchemyHttp http = AlchemyHttp.newBuilder()
             .usingTimeout(60, TimeUnit.SECONDS)
             .build();
+        
+        private boolean requestTokenImmediately = false;
         
         public static Builder newInstance()
         {
@@ -163,9 +168,21 @@ public interface YelpAPI
             return this;
         }
         
+        public Builder withEagerAuthentication()
+        {
+            requestTokenImmediately = true;
+            return this;
+        }
+        
         public YelpAPI build()
         {
             ensureReadyToBuild();
+            
+            if (requestTokenImmediately)
+            {
+                LOG.debug("Obtaining OAuth Token in advance.");
+                oauthProvider.getToken();
+            }
             
             return new YelpAPIImpl(http, oauthProvider, baseURL);
         }

@@ -16,6 +16,7 @@
 
 package tech.redroma.yelp;
 
+import com.google.common.base.Strings;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import tech.redroma.yelp.exceptions.YelpBadArgumentException;
 import tech.redroma.yelp.exceptions.YelpOperationFailedException;
 import tech.sirwellington.alchemy.annotations.access.Internal;
+import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
 import tech.sirwellington.alchemy.http.HttpResponse;
 import tech.sirwellington.alchemy.http.exceptions.AlchemyHttpException;
@@ -54,6 +56,12 @@ final class OAuthTokenProviderRenewing implements OAuthTokenProvider
     private final String clientId;
     private final String clientSecret;
     private static final int BAD_REQUEST = 400;
+    
+    /*
+     * TODO: Make this thread-safe by adding a Lock.
+     */
+    @ThreadUnsafe
+    private String oauthToken;
 
     OAuthTokenProviderRenewing(AlchemyHttp http, URL authenticationURL, String clientId, String clientSecret)
     {
@@ -73,6 +81,11 @@ final class OAuthTokenProviderRenewing implements OAuthTokenProvider
     @Override
     public String getToken()
     {
+        if (!Strings.isNullOrEmpty(oauthToken))
+        {
+            return oauthToken;
+        }
+        
         JsonObject response = null;
         try
         {
@@ -103,7 +116,8 @@ final class OAuthTokenProviderRenewing implements OAuthTokenProvider
         checkResponse(response);
         printExpiration(response);
         
-        return tryToGetTokenFrom(response);
+        this.oauthToken = tryToGetTokenFrom(response);
+        return this.oauthToken;
     }
 
     @Override

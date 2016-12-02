@@ -32,13 +32,13 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.n
  * @author SirWellington
  */
 @Internal
-final class OAuthTokenProviderBasic implements OAuthTokenProvider 
+final class BasicProvider implements OAuthTokenProvider 
 {
-    private final static Logger LOG = LoggerFactory.getLogger(OAuthTokenProviderBasic.class);
+    private final static Logger LOG = LoggerFactory.getLogger(BasicProvider.class);
     
     private final String token;
 
-    OAuthTokenProviderBasic(String token)
+    BasicProvider(String token)
     {
         checkThat(token).is(nonEmptyString());
         
@@ -74,7 +74,7 @@ final class OAuthTokenProviderBasic implements OAuthTokenProvider
         {
             return false;
         }
-        final OAuthTokenProviderBasic other = (OAuthTokenProviderBasic) obj;
+        final BasicProvider other = (BasicProvider) obj;
         if (!Objects.equals(this.token, other.token))
         {
             return false;

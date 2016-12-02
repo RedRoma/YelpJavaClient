@@ -46,10 +46,10 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.s
  * @author SirWellington
  */
 @Internal
-final class OAuthTokenProviderRenewing implements OAuthTokenProvider
+final class RenewingProvider implements OAuthTokenProvider
 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OAuthTokenProviderRenewing.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RenewingProvider.class);
 
     private final AlchemyHttp http;
     private final URL authenticationURL;
@@ -63,7 +63,7 @@ final class OAuthTokenProviderRenewing implements OAuthTokenProvider
     @ThreadUnsafe
     private String oauthToken;
 
-    OAuthTokenProviderRenewing(AlchemyHttp http, URL authenticationURL, String clientId, String clientSecret)
+    RenewingProvider(AlchemyHttp http, URL authenticationURL, String clientId, String clientSecret)
     {
         checkThat(http, authenticationURL)
             .are(notNull());
@@ -146,7 +146,7 @@ final class OAuthTokenProviderRenewing implements OAuthTokenProvider
         {
             return false;
         }
-        final OAuthTokenProviderRenewing other = (OAuthTokenProviderRenewing) obj;
+        final RenewingProvider other = (RenewingProvider) obj;
         if (!Objects.equals(this.clientId, other.clientId))
         {
             return false;

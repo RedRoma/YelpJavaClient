@@ -52,7 +52,7 @@ public interface OAuthTokenProvider
     {
         checkThat(token).is(nonEmptyString());
 
-        return new OAuthTokenProviderBasic(token);
+        return new BasicProvider(token);
     }
 
     /**
@@ -122,7 +122,7 @@ public interface OAuthTokenProvider
             .usingMessage("Alchemy HTTP cannot be null")
             .is(notNull());
 
-        return new OAuthTokenProviderRenewing(http, authURL, clientId, clientSecret);
+        return new RenewingProvider(http, authURL, clientId, clientSecret);
     }
 
     /**
@@ -139,7 +139,7 @@ public interface OAuthTokenProvider
             .usingMessage("token is required")
             .is(nonEmptyString());
 
-        return new OAuthTokenProviderBasic(token);
+        return new BasicProvider(token);
     }
 
 

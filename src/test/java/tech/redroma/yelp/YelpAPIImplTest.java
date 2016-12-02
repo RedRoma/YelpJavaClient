@@ -22,12 +22,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import tech.redroma.yelp.exceptions.YelpExcetion;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.generator.AlchemyGenerator;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
 import tech.sirwellington.alchemy.http.HttpResponse;
+import tech.sirwellington.alchemy.http.exceptions.AlchemyHttpException;
 import tech.sirwellington.alchemy.http.mock.AlchemyHttpMock;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
+import tech.sirwellington.alchemy.test.junit.runners.DontRepeat;
 import tech.sirwellington.alchemy.test.junit.runners.GeneratePojo;
 import tech.sirwellington.alchemy.test.junit.runners.GenerateString;
 import tech.sirwellington.alchemy.test.junit.runners.GenerateURL;
@@ -41,6 +44,7 @@ import static tech.sirwellington.alchemy.generator.CollectionGenerators.listOf;
 import static tech.sirwellington.alchemy.generator.GeolocationGenerators.latitudes;
 import static tech.sirwellington.alchemy.generator.GeolocationGenerators.longitudes;
 import static tech.sirwellington.alchemy.generator.ObjectGenerators.pojos;
+import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThrows;
 import static tech.sirwellington.alchemy.test.junit.runners.GenerateString.Type.ALPHABETIC;
 
 /**
@@ -123,7 +127,6 @@ public class YelpAPIImplTest
     {
         String expectedURL = baseURL + YelpAPIImpl.URLS.BUSINESSES + "/" + businessID;
         
-        
         http = AlchemyHttpMock.begin()
             .whenGet()
             .noBody()
@@ -136,6 +139,27 @@ public class YelpAPIImplTest
         YelpBusinessDetails result = instance.getBusinessDetails(businessID);
         assertThat(result, is(businessDetails));
     }
+    
+    @DontRepeat
+    @Test
+    public void testGetBusinessDetailsWhenFails() throws Exception
+    {
+        String expectedURL = baseURL + YelpAPIImpl.URLS.BUSINESSES + "/" + businessID;
+        Exception ex = new AlchemyHttpException();
+        
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .noBody()
+            .at(expectedURL)
+            .thenThrow(ex)
+            .build();
+        
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        assertThrows(() -> instance.getBusinessDetails(businessID))
+            .isInstanceOf(YelpExcetion.class);
+    }
+    
     
     @Test
     public void testSearchForBusinesses() throws Exception
@@ -155,6 +179,26 @@ public class YelpAPIImplTest
         List<YelpBusiness> results = instance.searchForBusinesses(request);
         assertThat(results, is(businesses));
         AlchemyHttpMock.verifyAllRequestsMade(http);
+    }
+    
+    @DontRepeat
+    @Test
+    public void testSearchForBusinessesWhenFails() throws Exception
+    {
+        String expectedURL = baseURL + YelpAPIImpl.URLS.BUSINESS_SEARCH;
+        
+        Exception ex = new AlchemyHttpException();
+        
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .anyBody()
+            .at(expectedURL)
+            .thenThrow(ex)
+            .build();
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        assertThrows(() -> instance.searchForBusinesses(request))
+            .isInstanceOf(YelpExcetion.class);
     }
     
 }

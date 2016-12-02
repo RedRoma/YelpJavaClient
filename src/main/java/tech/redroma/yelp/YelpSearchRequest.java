@@ -44,7 +44,7 @@ import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.g
 import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.lessThanOrEqualTo;
 import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.positiveInteger;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
-import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringWithLength;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringWithLengthBetween;
 
 /**
  * Use to make search requests to the Yelp API. Use {@link #newBuilder() } to create a request object.
@@ -692,7 +692,8 @@ public final class YelpSearchRequest
                 .usingMessage("Country Code cannot be empty")
                 .is(nonEmptyString())
                 .usingMessage("Country must take the form: {language code}_{country code}")
-                .is(stringWithLength(5));
+                .is(stringWithLengthBetween(5, 6));
+            
             this.locale = locale.code();
             return this;
         }

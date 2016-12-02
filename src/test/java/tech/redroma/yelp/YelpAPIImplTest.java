@@ -1,18 +1,18 @@
-/*
- * Copyright 2016 RedRoma, Inc..
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+ /*
+  * Copyright 2016 RedRoma, Inc..
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  *      http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 
 package tech.redroma.yelp;
 
@@ -28,6 +28,7 @@ import tech.sirwellington.alchemy.http.AlchemyHttp;
 import tech.sirwellington.alchemy.http.HttpResponse;
 import tech.sirwellington.alchemy.http.mock.AlchemyHttpMock;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
+import tech.sirwellington.alchemy.test.junit.runners.GeneratePojo;
 import tech.sirwellington.alchemy.test.junit.runners.GenerateString;
 import tech.sirwellington.alchemy.test.junit.runners.GenerateURL;
 import tech.sirwellington.alchemy.test.junit.runners.Repeat;
@@ -40,6 +41,7 @@ import static tech.sirwellington.alchemy.generator.CollectionGenerators.listOf;
 import static tech.sirwellington.alchemy.generator.GeolocationGenerators.latitudes;
 import static tech.sirwellington.alchemy.generator.GeolocationGenerators.longitudes;
 import static tech.sirwellington.alchemy.generator.ObjectGenerators.pojos;
+import static tech.sirwellington.alchemy.test.junit.runners.GenerateString.Type.ALPHABETIC;
 
 /**
  *
@@ -49,72 +51,92 @@ import static tech.sirwellington.alchemy.generator.ObjectGenerators.pojos;
 @RunWith(AlchemyTestRunner.class)
 public class YelpAPIImplTest
 {
-
+    
     @Mock
     private AlchemyHttp http;
-
+    
     @Mock
     private OAuthTokenProvider tokenProvider;
-
+    
     @GenerateURL
     private URL baseURL;
-
+    
     @GenerateString
     private String token;
-
+    
     @Mock
     private HttpResponse httpResponse;
-
+    
     private List<YelpBusiness> businesses;
-
+    
     private YelpSearchRequest request;
-
+    
     @GenerateString
     private String searchTerm;
-
+    
     private double latitude;
     private double longitude;
-
+    
+    @GenerateString(ALPHABETIC)
+    private String businessID;
+    
+    @GeneratePojo
+    private YelpBusinessDetails businessDetails;
+    
     private YelpAPIImpl instance;
-
+    
     @Before
     public void setUp() throws Exception
     {
-
+        
         setupData();
         setupMocks();
-
+        
         instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
     }
-
+    
     private void setupData() throws Exception
     {
         AlchemyGenerator<YelpBusiness> pojos = pojos(YelpBusiness.class);
         businesses = listOf(pojos);
-
+        
         longitude = one(longitudes());
         latitude = one(latitudes());
-
+        
         request = YelpSearchRequest.newBuilder()
             .withSearchTerm(searchTerm)
             .withCoordinate(Coordinate.of(latitude, longitude))
             .build();
     }
-
+    
     private void setupMocks() throws Exception
     {
         when(tokenProvider.getToken()).thenReturn(token);
-
+        
         when(httpResponse.bodyAsArrayOf(YelpBusiness.class))
             .thenReturn(businesses);
-
+        
     }
-
+    
     @Test
-    public void testGetBusinessDetails()
+    public void testGetBusinessDetails() throws Exception
     {
+        String expectedURL = baseURL + YelpAPIImpl.URLS.BUSINESSES + "/" + businessID;
+        
+        
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .noBody()
+            .at(expectedURL)
+            .thenReturnPOJO(businessDetails)
+            .build();
+        
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        YelpBusinessDetails result = instance.getBusinessDetails(businessID);
+        assertThat(result, is(businessDetails));
     }
-
+    
     @Test
     public void testSearchForBusinesses() throws Exception
     {
@@ -127,12 +149,12 @@ public class YelpAPIImplTest
             .at(expectedURL)
             .thenReturnResponse(httpResponse)
             .build();
-
+        
         instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
-
+        
         List<YelpBusiness> results = instance.searchForBusinesses(request);
         assertThat(results, is(businesses));
         AlchemyHttpMock.verifyAllRequestsMade(http);
     }
-
+    
 }

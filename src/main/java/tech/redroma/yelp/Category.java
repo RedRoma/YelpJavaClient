@@ -17,7 +17,6 @@
  
 package tech.redroma.yelp;
 
-
 import java.util.Objects;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
@@ -28,10 +27,14 @@ import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 /**
+ * The category of a business, for example "Grocery", "Restaurant".
+ *
+ * Can be {@linkplain YelpBusiness#categories returned by Yelp} or
+ * {@linkplain YelpAPI#searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) used in a Search request}.
  *
  * @author SirWellington
  */
-@Pojo 
+@Pojo
 @Mutable
 @ThreadUnsafe
 public class Category 

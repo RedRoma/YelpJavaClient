@@ -25,7 +25,6 @@ import org.mockito.Mock;
 import tech.redroma.yelp.exceptions.YelpAuthenticationException;
 import tech.redroma.yelp.exceptions.YelpExcetion;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
-import tech.sirwellington.alchemy.generator.AlchemyGenerator;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
 import tech.sirwellington.alchemy.http.HttpResponse;
 import tech.sirwellington.alchemy.http.exceptions.AlchemyHttpException;
@@ -42,10 +41,10 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
-import static tech.sirwellington.alchemy.generator.CollectionGenerators.listOf;
+import static tech.sirwellington.alchemy.generator.EnumGenerators.enumValueOf;
 import static tech.sirwellington.alchemy.generator.GeolocationGenerators.latitudes;
 import static tech.sirwellington.alchemy.generator.GeolocationGenerators.longitudes;
-import static tech.sirwellington.alchemy.generator.ObjectGenerators.pojos;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThrows;
 import static tech.sirwellington.alchemy.test.junit.runners.GenerateString.Type.ALPHABETIC;
 
@@ -72,6 +71,9 @@ public class YelpAPIImplTest
     
     @Mock
     private HttpResponse httpResponse;
+    
+    @GeneratePojo
+    private YelpResponses.SearchResponse searchResponse;
     
     private List<YelpBusiness> businesses;
     
@@ -107,8 +109,7 @@ public class YelpAPIImplTest
     
     private void setupData() throws Exception
     {
-        AlchemyGenerator<YelpBusiness> pojos = pojos(YelpBusiness.class);
-        businesses = listOf(pojos);
+        businesses = searchResponse.businesses;
         
         longitude = one(longitudes());
         latitude = one(latitudes());
@@ -116,6 +117,8 @@ public class YelpAPIImplTest
         request = YelpSearchRequest.newBuilder()
             .withSearchTerm(searchTerm)
             .withCoordinate(Coordinate.of(latitude, longitude))
+            .withLimit(one(integers(5, YelpSearchRequest.Builder.MAX_LIMIT)))
+            .withLocale(enumValueOf(Locale.Locales.class).get())
             .build();
         
         expectedGetBusinessDetailsURL = baseURL + YelpAPIImpl.URLS.BUSINESSES + "/" + businessID;
@@ -125,9 +128,6 @@ public class YelpAPIImplTest
     private void setupMocks() throws Exception
     {
         when(tokenProvider.getToken()).thenReturn(token);
-        
-        when(httpResponse.bodyAsArrayOf(YelpBusiness.class))
-            .thenReturn(businesses);
         
     }
     
@@ -194,7 +194,7 @@ public class YelpAPIImplTest
             .whenGet()
             .anyBody()
             .at(expectedSearchURL)
-            .thenReturnResponse(httpResponse)
+            .thenReturnPOJO(searchResponse)
             .build();
         
         instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());

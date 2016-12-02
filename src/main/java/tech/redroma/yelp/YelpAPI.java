@@ -97,9 +97,14 @@ public interface YelpAPI
      */
     List<YelpBusiness> searchForBusinesses(@Required YelpSearchRequest request) throws YelpExcetion;
     
-    static YelpAPI newInstance()
+    static YelpAPI newInstance(@NonEmpty String cliendId, @NonEmpty String clientSecret)
     {
-        return Builder.newInstance().build();
+        checkThat(cliendId, clientSecret)
+            .are(nonEmptyString());
+        
+        return Builder.newInstance()
+            .withClientCredentials(cliendId, clientSecret)
+            .build();
     }
     
     @BuilderPattern(role = BUILDER)

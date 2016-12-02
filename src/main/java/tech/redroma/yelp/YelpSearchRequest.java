@@ -874,6 +874,7 @@ public final class YelpSearchRequest
         public YelpSearchRequest build() throws YelpBadArgumentException
         {
             checkThatLocationIsSet();
+            checkThatOnlyOneOfOpenNowOrOpenAtIsSet();
 
             return new YelpSearchRequest(searchTerm,
                                        location,
@@ -904,6 +905,14 @@ public final class YelpSearchRequest
             }
 
             throw new YelpBadArgumentException("Either a location or a coordinate must be set.");
+        }
+
+        private void checkThatOnlyOneOfOpenNowOrOpenAtIsSet()
+        {
+            if (openAt != null && isOpenNow != null)
+            {
+                throw new IllegalArgumentException("You can use 'open_now' or 'open_at', but not both.");
+            }
         }
     }
 

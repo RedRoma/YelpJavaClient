@@ -221,7 +221,7 @@ final class RenewingProvider implements OAuthTokenProvider
         return response.get(Keys.TOKEN).getAsString();
     }
 
-    private static class Keys
+    static class Keys
     {
         static final String GRANT_TYPE = "grant_type";
         static final String CLIENT_ID = "client_id";

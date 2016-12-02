@@ -50,7 +50,9 @@ public interface OAuthTokenProvider
      */
     public static OAuthTokenProvider newBasicTokenProvider(@NonEmpty String token) throws IllegalArgumentException
     {
-        checkThat(token).is(nonEmptyString());
+        checkThat(token)
+            .usingMessage("token is required")
+            .is(nonEmptyString());
 
         return new BasicProvider(token);
     }
@@ -132,16 +134,5 @@ public interface OAuthTokenProvider
      */
     @Required
     String getToken();
-
-    static OAuthTokenProvider basicTokenProviderWithToken(@NonEmpty String token) throws IllegalArgumentException
-    {
-        checkThat(token)
-            .usingMessage("token is required")
-            .is(nonEmptyString());
-
-        return new BasicProvider(token);
-    }
-
-
 
 }

@@ -35,7 +35,16 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.n
  */
 public interface YelpAPI 
 {
-    
+    /**
+     * Returns the detail information of a business. Normally, you'll get the business id from the 
+     * {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}. To get 
+     * review information for a business, refer to ...
+     * 
+     * @param business The business to get more details of.
+     * @return
+     * @throws YelpExcetion 
+     * @see #getBusinessDetails(java.lang.String) 
+     */
     default YelpBusinessDetails getBusinessDetails(@Required YelpBusiness business) throws YelpExcetion
     {
         checkThat(business)
@@ -50,9 +59,33 @@ public interface YelpAPI
         return getBusinessDetails(business.id);
     }
     
+    /**
+     * Returns the detail information of a business. Normally, you'll get the business id from
+     * the {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}.
+     * TO get review information for a business, refer to ...
+     * 
+     * @param businessId
+     * @return
+     * @throws YelpExcetion 
+     * @see #getBusinessDetails(java.lang.String) 
+     * @see #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) 
+     */
     @Required
     YelpBusinessDetails getBusinessDetails(@NonEmpty String businessId) throws YelpExcetion;
     
+    /**
+     * Returns up to 1,000 businesses based on the provided search criteria. It has some basic information about the businesses
+     * that match the search criteria. To get details information, see {@link #getBusinessDetails(java.lang.String) }.
+     * <p>
+     * To create a search request, see {@link YelpSearchRequest#newBuilder() }.
+     * 
+     * @param request
+     * @return
+     * @throws YelpExcetion 
+     * @see #getBusinessDetails(java.lang.String) 
+     * @see #getBusinessDetails(tech.redroma.yelp.YelpBusiness) 
+     * @see YelpSearchRequest
+     */
     List<YelpBusiness> searchForBusinesses(@Required YelpSearchRequest request) throws YelpExcetion;
     
     static YelpAPI newInstance()

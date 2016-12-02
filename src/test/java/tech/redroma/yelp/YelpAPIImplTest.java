@@ -223,4 +223,25 @@ public class YelpAPIImplTest
             .isInstanceOf(YelpExcetion.class);
     }
     
+    @DontRepeat
+    @Test
+    public void testSearchForBusinessesWhenTokenInvalid() throws Exception
+    {
+        HttpResponse fakeResponse = mock(HttpResponse.class);
+        when(fakeResponse.statusCode()).thenReturn(401);
+        Exception ex = new AlchemyHttpException(fakeResponse);
+
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .noBody()
+            .at(expectedSearchURL)
+            .thenThrow(ex)
+            .build();
+        
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        assertThrows(() -> instance.searchForBusinesses(request))
+            .isInstanceOf(YelpAuthenticationException.class);
+    }
+    
 }

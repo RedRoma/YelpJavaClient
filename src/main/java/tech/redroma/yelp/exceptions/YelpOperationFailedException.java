@@ -17,7 +17,13 @@
 package tech.redroma.yelp.exceptions;
 
 /**
- *
+ * Thrown when an operation fails and could not be completed.
+ * 
+ * <pre>
+ * + 500 error from Yelp's API
+ * + Network issue
+ * + Unexpected condition
+ * </pre>
  * @author SirWellington
  */
 public class YelpOperationFailedException extends YelpExcetion

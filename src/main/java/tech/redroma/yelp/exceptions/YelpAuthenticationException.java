@@ -17,7 +17,14 @@
 package tech.redroma.yelp.exceptions;
 
 /**
- * Thrown when an Authentication error occurs communicating with the Yelp API.
+ * Thrown when an Authentication error occurs communicating with the Yelp API. 
+ * <p>
+ * This can happen because:
+ * <pre>
+ * + The client_id or client_secret were invalid
+ * + An OAuth token could not be obtained from Yelp
+ * + The OAuth token being used has expired
+ * </pre>
  *
  * @author SirWellington
  */

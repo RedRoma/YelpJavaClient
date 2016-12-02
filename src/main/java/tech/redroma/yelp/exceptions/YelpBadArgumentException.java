@@ -17,7 +17,8 @@
 package tech.redroma.yelp.exceptions;
 
 /**
- *
+ * Thrown when a request is made with a bad argument, causing a {@code 400}-class error.
+ * 
  * @author SirWellington
  */
 public class YelpBadArgumentException extends YelpExcetion

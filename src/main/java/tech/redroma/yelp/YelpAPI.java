@@ -18,14 +18,19 @@
 package tech.redroma.yelp;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import tech.redroma.yelp.exceptions.YelpBadArgumentException;
 import tech.redroma.yelp.exceptions.YelpExcetion;
+import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
+import tech.sirwellington.alchemy.http.AlchemyHttp;
 
 import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull;
+import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.validURL;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringWithLengthGreaterThanOrEqualTo;
 
 /**
  * The interface used to interact with <a href= "https://www.yelp.com/developers/documentation/v3">Yelp's Developer API</a>.
@@ -95,16 +100,80 @@ public interface YelpAPI
     
     static class Builder
     {
-        private String apiKey = "";
-
+        private static final String DEFAULT_BASE_URL = "https://api.yelp.com/v3";
+       
+        private OAuthTokenProvider oauthProvider;
+        
+        private String baseURL = DEFAULT_BASE_URL;
+        
+        private AlchemyHttp http = AlchemyHttp.newBuilder()
+            .usingTimeout(60, TimeUnit.SECONDS)
+            .build();
+        
         public static Builder newInstance()
         {
             return new Builder();
         }
         
+        public Builder withBaseURL(@NonEmpty String baseURL) throws IllegalArgumentException
+        {
+            checkThat(baseURL)
+                .is(validURL());
+            
+            this.baseURL = baseURL;
+            return this;
+        }
+        
+        public Builder withHttpClient(@Required AlchemyHttp http) throws IllegalArgumentException
+        {
+            checkThat(http).is(notNull());
+            
+            this.http = http;
+            return this;
+        }
+        
+        public Builder withOAuthToken(@NonEmpty String oauthToken) throws IllegalArgumentException
+        {
+            checkThat(oauthToken)
+                .is(nonEmptyString())
+                .is(stringWithLengthGreaterThanOrEqualTo(2));
+            
+            this.oauthProvider = OAuthTokenProvider.newBasicTokenProvider(oauthToken);
+            return this;
+        }
+        
+        public Builder withClientCredentials(@NonEmpty String cliendId, @NonEmpty String clientSecret) throws IllegalArgumentException
+        {
+            checkThat(cliendId, clientSecret)
+                .usingMessage("invalid client id and secret")
+                .are(nonEmptyString())
+                .are(stringWithLengthGreaterThanOrEqualTo(3));
+            
+            this.oauthProvider = OAuthTokenProvider.newRefreshingTokenProvider(cliendId, clientSecret);
+            return this;
+        }
+        
         public YelpAPI build()
         {
-            return null;
+            ensureReadyToBuild();
+            
+            return new YelpAPIImpl(http, oauthProvider, baseURL);
+        }
+
+        private void ensureReadyToBuild()
+        {
+            checkThat(baseURL)
+                .usingMessage("invalid base URL: " + baseURL)
+                .is(nonEmptyString())
+                .is(validURL());
+            
+            checkThat(oauthProvider)
+                .usingMessage("OAuth Provider missing")
+                .is(notNull());
+            
+            checkThat(http)
+                .usingMessage("missing Alchemy HTTP client")
+                .is(notNull());
         }
         
     }

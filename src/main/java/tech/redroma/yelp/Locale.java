@@ -23,18 +23,36 @@ import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 /**
- * See {@link Locales} for supported locales.
+ * A Local consists of a code, country, and language.
+ * <p>
+ * See {@link Locales} for locales supported by Yelp.
  * 
  * @author SirWellington
  * @see Locales
  */
 public interface Locale
 {
-    
+    /**
+     * For example, {@code en_CA}, for English/Canada.
+     * @return The 5 digit code consisting of {@code language-code_country-code }. The underscore in the middle is included.
+     */
     public String code();
+    
+    /**
+     * For example, Italy.
+     * @return The display name of the country.
+     */
     public String country();
+    
+    /**
+     * For example, Italian.
+     * @return The display name of the language.
+     */
     public String language();
     
+    /**
+     * All of the Locales supported by Yelp.
+     */
     public enum Locales implements Locale
     {
         CZECH_REPUBLIC("cs_CZ", "Czech Republic", "Czech"),

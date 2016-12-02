@@ -38,6 +38,10 @@ public class Coordinate
     double latitude;
     double longitude;
 
+    Coordinate()
+    {
+    }
+    
     public Coordinate(double latitude, double longitude)
     {
         checkThat(latitude).is(validLatitude());

@@ -670,6 +670,8 @@ public final class YelpSearchRequest
 
         /**
          * Specify the locale to return the business information in.
+         * <p>
+         * To see the possible Locales, refer to {@link Locale.Locales}.
          *
          * @param locale The locale (cannot be empty).
          * @return

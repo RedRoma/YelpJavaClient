@@ -40,6 +40,7 @@ public class YelpAPIIT
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     //Set to your own credentials to enable the test
+    //BE SURE NOT TO CHECK THIS INTO A SOURCE REPOSITORY.
     private final String clientId = "";
     private final String clientSecret = "";
 

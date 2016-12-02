@@ -440,6 +440,11 @@ public final class YelpSearchRequest
         public final static int MAX_LIMIT = 50;
         
         /**
+         * The maximum number of offset that can used in a query.
+         */
+        public final static int MAX_OFFSET = 1000;
+        
+        /**
          * The widest radius that can be used in a Search.
          * Set to 40,000 meters, or 25 miles.
          */
@@ -726,7 +731,10 @@ public final class YelpSearchRequest
         {
             checkThat(offset)
                 .usingMessage("offset must be > 0")
-                .is(positiveInteger());
+                .is(positiveInteger())
+                .usingMessage("Per Yelp's API rules, the offset cannot exceed: " + MAX_OFFSET)
+                .is(lessThanOrEqualTo(MAX_OFFSET));
+                
 
             this.offset = offset;
             return this;

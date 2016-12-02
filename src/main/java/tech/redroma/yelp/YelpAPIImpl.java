@@ -40,7 +40,7 @@ import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 /**
- * This internal class is reposisble for implementing the business logic necessary for making Yelp API Queries. It implements all
+ * This internal class is responsible for implementing the business logic necessary for making Yelp API Queries. It implements all
  * of the operations defined in the {@link YelpAPI}.
  *
  * @author SirWellington

@@ -24,8 +24,8 @@ import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
 import tech.sirwellington.alchemy.test.junit.runners.GenerateString;
 import tech.sirwellington.alchemy.test.junit.runners.Repeat;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Repeat(10)
 @RunWith(AlchemyTestRunner.class)
-public class NoOpYelpIT 
+public class NoOpYelpTest
 {
     @GenerateString
     private String businessId;

@@ -111,6 +111,9 @@ public interface YelpAPI
             .build();
     }
     
+    /** A No-Op Instance that returns no results. Suitable for testing purposes. */
+    static YelpAPI NO_OP = new NoOpYelp();
+    
     /**
      * Use to create a more customized {@link YelpAPI}.
      */

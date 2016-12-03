@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import tech.redroma.yelp.exceptions.YelpBadArgumentException;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
+import tech.sirwellington.alchemy.test.junit.runners.GenerateString;
 
 import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThrows;
 
@@ -34,6 +35,13 @@ import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThr
 public class YelpSearchRequestBuilderTest 
 {
     private YelpSearchRequest.Builder instance;
+    
+    @GenerateString
+    private String cliendId;
+    
+    @GenerateString
+    private String cliendSecret;
+    
     
     @Before
     public void setUp()

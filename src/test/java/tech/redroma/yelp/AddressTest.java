@@ -59,7 +59,7 @@ public class AddressTest
     public void testInstance()
     {
         assertThat(instance, notNullValue());
-        
+
         assertThat(instance.address1, not(isEmptyOrNullString()));
         assertThat(instance.address2, not(isEmptyOrNullString()));
         assertThat(instance.address3, not(isEmptyOrNullString()));
@@ -68,7 +68,7 @@ public class AddressTest
         assertThat(instance.country, not(isEmptyOrNullString()));
         assertThat(instance.zipCode, not(isEmptyOrNullString()));
     }
-    
+
     @Test
     public void testEqualsWhenNotEqual()
     {
@@ -86,6 +86,14 @@ public class AddressTest
     {
         assertThat(first.hashCode(), is(first.hashCode()));
         assertThat(first.hashCode(), not(second.hashCode()));
+    }
+
+    @Test
+    public void testHasAddress1()
+    {
+        assertTrue(instance.hasAddress1());
+        instance.address1 = null;
+        assertFalse(instance.hasAddress1());
     }
 
     @Test

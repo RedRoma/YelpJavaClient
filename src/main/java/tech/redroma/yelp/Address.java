@@ -46,6 +46,11 @@ public class Address
     @SerializedName("zip_code")
     public String zipCode;
 
+    public boolean hasAddress1()
+    {
+        return !isNullOrEmpty(address1);
+    }
+    
     public boolean hasAddress2()
     {
         return !isNullOrEmpty(address2);

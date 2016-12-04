@@ -558,9 +558,20 @@ public final class YelpSearchRequest
                 text += " " + address.address3;
             }
 
-            text += " " + address.city;
-            text += " " + address.state;
-            text += " " + address.country;
+            if (address.hasCity())
+            {
+                text += " " + address.city;
+            }
+
+            if (address.hasState())
+            {
+                text += " " + address.state;
+            }
+
+            if (address.hasCountry())
+            {
+                text += " " + address.country;
+            }
 
             if (address.hasZipCode())
             {

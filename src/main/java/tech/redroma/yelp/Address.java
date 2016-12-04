@@ -61,6 +61,11 @@ public class Address
         return !isNullOrEmpty(zipCode);
     }
     
+    public boolean hasCountry()
+    {
+        return !isNullOrEmpty(country);
+    }
+    
     @Override
     public int hashCode()
     {

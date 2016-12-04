@@ -112,4 +112,12 @@ public class AddressTest
         assertFalse(instance.hasZipCode());
     }
 
+    @Test
+    public void testHasCountry()
+    {
+        assertTrue(instance.hasCountry());
+        instance.country = null;
+        assertFalse(instance.hasCountry());
+    }
+
 }

@@ -49,14 +49,19 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.s
 public interface YelpAPI 
 {
     /**
-     * Returns the detail information of a business. Normally, you'll get the business id from the 
-     * {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}. To get 
-     * review information for a business, refer to ...
-     * 
+     * Returns detailed information of a business. This includes things like times-of-operation and additional photos.
+     * <p>
+     * Normally, you'll get the {@link YelpBusiness} object from the
+     * {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}.
+     * <p>
+     * To get review information for a business, refer to ...
+     *
      * @param business The business to get more details of.
      * @return
-     * @throws YelpExcetion 
-     * @see #getBusinessDetails(java.lang.String) 
+     * @throws YelpExcetion
+     *
+     * @see YelpBusinessDetails
+     * @see #getBusinessDetails(java.lang.String)
      */
     default YelpBusinessDetails getBusinessDetails(@Required YelpBusiness business) throws YelpExcetion
     {
@@ -64,18 +69,21 @@ public interface YelpAPI
             .throwing(YelpBadArgumentException.class)
             .usingMessage("business cannot be null")
             .is(notNull());
-            
+
         checkThat(business.id)
             .usingMessage("business is missing it's id")
             .is(nonEmptyString());
-        
+
         return getBusinessDetails(business.id);
     }
-    
+
     /**
-     * Returns the detail information of a business. Normally, you'll get the business id from
-     * the {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}.
-     * TO get review information for a business, refer to ...
+     * Returns detailed information of a business. This includes things like times-of-operation and additional photos.
+     * <p>
+     * Normally, you'll get the business id from the
+     * {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}.
+     * <p>
+     * To get review information for a business, refer to ...
      * 
      * @param businessId
      * @return

@@ -27,7 +27,8 @@ import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAsserti
 import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLongitude;
 
 /**
- *
+ * Represents a Geo-Coordinate of latitude and longitude;
+ * 
  * @author SirWellington
  */
 @Pojo 
@@ -52,11 +53,12 @@ public class Coordinate
     }
 
     /**
-     *
-     * @param latitude  A valid latitude
-     * @param longitude A valid longitude
+     * Creates a {@code Coordinate} object from the specified latitude and longitude.
+     * 
+     * @param latitude  A valid latitude: {@code (-90...90)}.
+     * @param longitude A valid longitude: {@code (-180...180)}.
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException If the coordinate is invalid.
      */
     public static Coordinate of(double latitude, double longitude) throws IllegalArgumentException
     {

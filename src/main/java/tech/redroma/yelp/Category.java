@@ -27,8 +27,8 @@ import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 /**
- * The category of a business, for example "Grocery", "Restaurant".
- *
+ * The category of a business, for example "Grocery", "Restaurant", etc.
+ *<p>
  * Can be {@linkplain YelpBusiness#categories returned by Yelp} or
  * {@linkplain YelpAPI#searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) used in a Search request}.
  *

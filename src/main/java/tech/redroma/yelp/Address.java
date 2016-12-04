@@ -61,6 +61,16 @@ public class Address
         return !isNullOrEmpty(zipCode);
     }
     
+    public boolean hasCity()
+    {
+        return !isNullOrEmpty(city);
+    }
+    
+    public boolean hasState()
+    {
+        return !isNullOrEmpty(state);
+    }
+    
     public boolean hasCountry()
     {
         return !isNullOrEmpty(country);

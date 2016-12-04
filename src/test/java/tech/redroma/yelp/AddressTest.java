@@ -120,4 +120,20 @@ public class AddressTest
         assertFalse(instance.hasCountry());
     }
 
+    @Test
+    public void testHasCity()
+    {
+        assertTrue(instance.hasCity());
+        instance.city = null;
+        assertFalse(instance.hasCity());
+    }
+
+    @Test
+    public void testHasState()
+    {
+        assertTrue(instance.hasState());
+        instance.state = null;
+        assertFalse(instance.hasState());
+    }
+
 }

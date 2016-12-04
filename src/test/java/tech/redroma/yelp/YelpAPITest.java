@@ -16,20 +16,18 @@
 
 package tech.redroma.yelp;
 
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.Mock;
-import tech.redroma.yelp.exceptions.YelpExcetion;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
 import tech.sirwellington.alchemy.test.junit.runners.DontRepeat;
+import tech.sirwellington.alchemy.test.junit.runners.GenerateString;
 import tech.sirwellington.alchemy.test.junit.runners.Repeat;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThrows;
+
 
 /**
  *
@@ -39,7 +37,13 @@ import static org.mockito.Mockito.*;
 @RunWith(AlchemyTestRunner.class)
 public class YelpAPITest 
 {
-
+    @GenerateString
+    private String cliendId;
+    
+    @GenerateString
+    private String cliendSecret;
+    
+    
     @Before
     public void setUp() throws Exception
     {
@@ -59,38 +63,20 @@ public class YelpAPITest
         
     }
 
-    @Test
-    public void testGetBusinessDetails_YelpBusiness()
-    {
-    }
-
-    @Test
-    public void testGetBusinessDetails_String()
-    {
-    }
-
-    @Test
-    public void testSearchForBusinesses()
-    {
-    }
 
     @Test
     public void testNewInstance()
     {
+        YelpAPI result = YelpAPI.newInstance(cliendId, cliendSecret);
+        assertThat(result, notNullValue());
     }
-
-    public class YelpAPIImpl implements YelpAPI
+    
+    @DontRepeat
+    @Test
+    public void testNewInstanceWithBadArgs()
     {
-
-        public YelpBusinessDetails getBusinessDetails(String businessId) throws YelpExcetion
-        {
-            return null;
-        }
-
-        public List<YelpBusiness> searchForBusinesses(YelpSearchRequest request) throws YelpExcetion
-        {
-            return null;
-        }
+        assertThrows(() -> YelpAPI.newInstance("", cliendSecret)).isInstanceOf(IllegalArgumentException.class);
+        assertThrows(() -> YelpAPI.newInstance(cliendId, "")).isInstanceOf(IllegalArgumentException.class);
     }
 
 }

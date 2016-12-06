@@ -189,8 +189,8 @@ public interface YelpAPI
          * @param http The Alchemy HTTP client to use.
          * @return
          * @throws IllegalArgumentException If the client is null
+         * @see AlchemyHttp#newBuilder() 
          * @see AlchemyHttp#newInstance(org.apache.http.client.HttpClient, java.util.concurrent.ExecutorService, java.util.Map) 
-         * @see AlchemyHttp.Builder
          */
         public Builder withHttpClient(@Required AlchemyHttp http) throws IllegalArgumentException
         {

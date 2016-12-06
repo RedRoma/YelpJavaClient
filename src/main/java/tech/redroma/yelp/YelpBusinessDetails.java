@@ -23,6 +23,8 @@ import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * Detailed information about a Yelp Business. This can be obtained by calling 
  * {@link YelpAPI#getBusinessDetails(java.lang.String) }
@@ -79,8 +81,17 @@ public class YelpBusinessDetails
     public Coordinate coordinates;
 
     public Address location;
+    
+    public Price getPriceLevel()
+    {
+        if (isNullOrEmpty(price))
+        {
+            return null;
+        }
+        
+        return Price.fromString(price);
+    }
 
-    @Override
     public int hashCode()
     {
         int hash = 7;

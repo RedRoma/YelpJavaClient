@@ -21,6 +21,8 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import tech.sirwellington.alchemy.generator.AlchemyGenerator;
+import tech.sirwellington.alchemy.generator.StringGenerators;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
 import tech.sirwellington.alchemy.test.junit.runners.DontRepeat;
 import tech.sirwellington.alchemy.test.junit.runners.GeneratePojo;
@@ -70,12 +72,15 @@ public class YelpBusinessDetailsTest
     {
         instance.coordinates.latitude = one(latitudes());
         instance.coordinates.longitude = one(longitudes());
+        instance.price = one(prices());
 
         first.coordinates.latitude = one(latitudes());
         first.coordinates.longitude = one(longitudes());
+        first.price = one(prices());
 
         second.coordinates.latitude = one(latitudes());
         second.coordinates.longitude = one(longitudes());
+        second.price = one(prices());
     }
 
     @DontRepeat
@@ -199,4 +204,15 @@ public class YelpBusinessDetailsTest
         checkBusiness(result);
     }
 
+    @Test
+    public void testGetPriceLevel()
+    {
+        Price price = instance.getPriceLevel();
+        assertThat(price, notNullValue());
+    }
+
+    private AlchemyGenerator<String> prices()
+    {
+        return StringGenerators.stringsFromFixedList("$", "$$", "$$$", "$$$$");
+    }
 }

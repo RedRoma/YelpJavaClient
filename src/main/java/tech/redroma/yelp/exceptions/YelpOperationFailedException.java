@@ -26,7 +26,7 @@ package tech.redroma.yelp.exceptions;
  * </pre>
  * @author SirWellington
  */
-public class YelpOperationFailedException extends YelpExcetion
+public class YelpOperationFailedException extends YelpException
 {
 
     public YelpOperationFailedException()

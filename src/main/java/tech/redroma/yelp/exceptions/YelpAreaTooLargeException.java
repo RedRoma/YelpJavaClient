@@ -21,7 +21,7 @@ package tech.redroma.yelp.exceptions;
  * 
  * @author SirWellington
  */
-public class YelpAreaTooLargeException extends YelpExcetion
+public class YelpAreaTooLargeException extends YelpException
 {
 
     public YelpAreaTooLargeException()

@@ -28,7 +28,7 @@ package tech.redroma.yelp.exceptions;
  *
  * @author SirWellington
  */
-public class YelpAuthenticationException extends YelpExcetion
+public class YelpAuthenticationException extends YelpException
 {
 
     public YelpAuthenticationException()

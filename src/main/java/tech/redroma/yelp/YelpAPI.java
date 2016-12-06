@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.redroma.yelp.exceptions.YelpBadArgumentException;
-import tech.redroma.yelp.exceptions.YelpExcetion;
+import tech.redroma.yelp.exceptions.YelpException;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
@@ -36,6 +36,7 @@ import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull
 import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.validURL;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringWithLengthGreaterThanOrEqualTo;
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 
 /**
  * The interface used to interact with <a href= "https://www.yelp.com/developers/documentation/v3">Yelp's Developer API</a>.
@@ -58,12 +59,12 @@ public interface YelpAPI
      *
      * @param business The business to get more details of.
      * @return
-     * @throws YelpExcetion
+     * @throws YelpException
      *
      * @see YelpBusinessDetails
      * @see #getBusinessDetails(java.lang.String)
      */
-    default YelpBusinessDetails getBusinessDetails(@Required YelpBusiness business) throws YelpExcetion
+    default YelpBusinessDetails getBusinessDetails(@Required YelpBusiness business) throws YelpException
     {
         checkThat(business)
             .throwing(YelpBadArgumentException.class)
@@ -87,12 +88,12 @@ public interface YelpAPI
      * 
      * @param businessId
      * @return
-     * @throws YelpExcetion 
+     * @throws YelpException 
      * @see #getBusinessDetails(java.lang.String) 
      * @see #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) 
      */
     @Required
-    YelpBusinessDetails getBusinessDetails(@NonEmpty String businessId) throws YelpExcetion;
+    YelpBusinessDetails getBusinessDetails(@NonEmpty String businessId) throws YelpException;
     
     /**
      * Returns up to 1,000 businesses based on the provided search criteria. It has some basic information about the businesses
@@ -102,12 +103,12 @@ public interface YelpAPI
      * 
      * @param request
      * @return
-     * @throws YelpExcetion 
+     * @throws YelpException 
      * @see #getBusinessDetails(java.lang.String) 
      * @see #getBusinessDetails(tech.redroma.yelp.YelpBusiness) 
      * @see YelpSearchRequest
      */
-    List<YelpBusiness> searchForBusinesses(@Required YelpSearchRequest request) throws YelpExcetion;
+    List<YelpBusiness> searchForBusinesses(@Required YelpSearchRequest request) throws YelpException;
     
     static YelpAPI newInstance(@NonEmpty String cliendId, @NonEmpty String clientSecret)
     {

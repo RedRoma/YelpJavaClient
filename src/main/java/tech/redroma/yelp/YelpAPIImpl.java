@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import sir.wellington.alchemy.collections.lists.Lists;
 import tech.redroma.yelp.exceptions.YelpAuthenticationException;
 import tech.redroma.yelp.exceptions.YelpBadArgumentException;
-import tech.redroma.yelp.exceptions.YelpExcetion;
+import tech.redroma.yelp.exceptions.YelpException;
 import tech.redroma.yelp.exceptions.YelpOperationFailedException;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.annotations.access.Internal;
@@ -38,6 +38,8 @@ import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull;
 import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.validURL;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
+import static java.lang.String.format;
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 
 /**
  * This internal class is responsible for implementing the business logic necessary for making Yelp API Queries. It implements all
@@ -70,7 +72,7 @@ final class YelpAPIImpl implements YelpAPI
     }
     
     @Override
-    public YelpBusinessDetails getBusinessDetails(String businessId) throws YelpExcetion
+    public YelpBusinessDetails getBusinessDetails(String businessId) throws YelpException
     {
         checkThat(businessId)
             .throwing(YelpBadArgumentException.class)
@@ -86,7 +88,7 @@ final class YelpAPIImpl implements YelpAPI
     }
     
     @Override
-    public List<YelpBusiness> searchForBusinesses(YelpSearchRequest request) throws YelpExcetion
+    public List<YelpBusiness> searchForBusinesses(YelpSearchRequest request) throws YelpException
     {
         String token = tokenProvider.getToken();
         

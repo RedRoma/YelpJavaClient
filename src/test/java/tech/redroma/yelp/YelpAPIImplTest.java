@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import tech.redroma.yelp.exceptions.YelpAuthenticationException;
-import tech.redroma.yelp.exceptions.YelpExcetion;
+import tech.redroma.yelp.exceptions.YelpException;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
 import tech.sirwellington.alchemy.http.HttpResponse;
@@ -163,7 +163,7 @@ public class YelpAPIImplTest
         instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
         
         assertThrows(() -> instance.getBusinessDetails(businessID))
-            .isInstanceOf(YelpExcetion.class);
+            .isInstanceOf(YelpException.class);
     }
     
     @DontRepeat
@@ -220,7 +220,7 @@ public class YelpAPIImplTest
         instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
         
         assertThrows(() -> instance.searchForBusinesses(request))
-            .isInstanceOf(YelpExcetion.class);
+            .isInstanceOf(YelpException.class);
     }
     
     @DontRepeat

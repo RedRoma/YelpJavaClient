@@ -21,24 +21,24 @@ package tech.redroma.yelp.exceptions;
  * 
  * @author SirWellington
  */
-public class YelpExcetion extends RuntimeException
+public class YelpException extends RuntimeException
 {
 
-    public YelpExcetion()
+    public YelpException()
     {
     }
 
-    public YelpExcetion(String message)
+    public YelpException(String message)
     {
         super(message);
     }
 
-    public YelpExcetion(String message, Throwable cause)
+    public YelpException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public YelpExcetion(Throwable cause)
+    public YelpException(Throwable cause)
     {
         super(cause);
     }

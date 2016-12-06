@@ -22,7 +22,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sir.wellington.alchemy.collections.lists.Lists;
-import tech.redroma.yelp.exceptions.YelpExcetion;
+import tech.redroma.yelp.exceptions.YelpException;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 
 /**
@@ -36,13 +36,13 @@ final class NoOpYelp implements YelpAPI
     private final static Logger LOG = LoggerFactory.getLogger(NoOpYelp.class);
 
     @Override
-    public YelpBusinessDetails getBusinessDetails(String businessId) throws YelpExcetion
+    public YelpBusinessDetails getBusinessDetails(String businessId) throws YelpException
     {
         return null;
     }
 
     @Override
-    public List<YelpBusiness> searchForBusinesses(YelpSearchRequest request) throws YelpExcetion
+    public List<YelpBusiness> searchForBusinesses(YelpSearchRequest request) throws YelpException
     {
         return Lists.emptyList();
     }

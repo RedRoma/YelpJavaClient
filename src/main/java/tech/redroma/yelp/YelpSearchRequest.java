@@ -46,6 +46,10 @@ import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.p
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringContaining;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringWithLengthBetween;
+import static java.util.stream.Collectors.joining;
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
+import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.greaterThanOrEqualTo;
+import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.lessThanOrEqualTo;
 
 /**
  * Use to make search requests to the Yelp API. Use {@link #newBuilder() } to create a request object.
@@ -401,7 +405,7 @@ public final class YelpSearchRequest
         }
     }
 
-    public enum PricingLevel
+    public enum Price
     {
         $(1),
         $$(2),
@@ -410,7 +414,7 @@ public final class YelpSearchRequest
 
         final int number;
 
-        private PricingLevel(int number)
+        private Price(int number)
         {
             this.number = number;
         }
@@ -782,11 +786,11 @@ public final class YelpSearchRequest
          * @see #withPrices(java.util.List) 
          */
         @Optional
-        public Builder withPrices(@Required PricingLevel first, PricingLevel...others) throws IllegalArgumentException
+        public Builder withPrices(@Required Price first, Price...others) throws IllegalArgumentException
         {
             checkThat(first).is(notNull());
             
-            List<PricingLevel> pricingLevels = Lists.createFrom(first, others);
+            List<Price> pricingLevels = Lists.createFrom(first, others);
             return withPrices(pricingLevels);
         }
         
@@ -799,7 +803,7 @@ public final class YelpSearchRequest
          * @see #withPrices(tech.redroma.yelp.YelpSearchRequest.PricingLevel, tech.redroma.yelp.YelpSearchRequest.PricingLevel...) 
          */
         @Optional
-        public Builder withPrices(@NonEmpty List<PricingLevel> pricingLevels) throws IllegalArgumentException
+        public Builder withPrices(@NonEmpty List<Price> pricingLevels) throws IllegalArgumentException
         {
             checkThat(pricingLevels)
                 .is(notNull())

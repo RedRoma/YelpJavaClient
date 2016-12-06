@@ -101,4 +101,61 @@ final class YelpResponses
         }
 
     }
+
+    @Internal
+    @Pojo
+    static class ReviewsResponse
+    {
+
+        /**
+         * The total number of reviews for the business
+         */
+        public int total;
+        /**
+         * The reviews returned from the Yelp API
+         */
+        public List<YelpReview> reviews;
+
+        ReviewsResponse()
+        {
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int hash = 7;
+            hash = 29 * hash + this.total;
+            hash = 29 * hash + Objects.hashCode(this.reviews);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+            if (obj == null)
+            {
+                return false;
+            }
+            if (getClass() != obj.getClass())
+            {
+                return false;
+            }
+            final ReviewsResponse other = (ReviewsResponse) obj;
+            if (this.total != other.total)
+            {
+                return false;
+            }
+            if (!Objects.equals(this.reviews, other.reviews))
+            {
+                return false;
+            }
+            return true;
+        }
+
+    }
+
 }

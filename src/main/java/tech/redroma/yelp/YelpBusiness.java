@@ -97,7 +97,7 @@ public class YelpBusiness
      */
     @Optional
     public Double distance;
-
+    
     @Override
     public int hashCode()
     {

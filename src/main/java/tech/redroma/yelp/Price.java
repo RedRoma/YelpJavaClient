@@ -40,7 +40,7 @@ public enum Price
      * </pre>
      * @param number Must be in the range 
      * @return
-     * @throws IllegalArgumentException 
+     * @throws IllegalArgumentException If the number could not be matched to a {@link Price}.
      */
     public static Price fromNumber(int number) throws IllegalArgumentException
     {

@@ -121,7 +121,7 @@ final class YelpAPIImpl implements YelpAPI
                 throw new YelpBadArgumentException(ex);
             }
             
-            throw new YelpOperationFailedException(format("Failed to make serach request at %s with [%s]", url, request), ex);
+            throw new YelpOperationFailedException(format("Failed to make search request at %s with [%s]", url, request), ex);
         }
         catch (Exception ex)
         {
@@ -132,6 +132,7 @@ final class YelpAPIImpl implements YelpAPI
         if (response == null)
         {
             LOG.warn("Received null response from Yelp at {} for request {}", url, request);
+            throw new YelpOperationFailedException("Received null response from yelp at:" + url);
         }
         
         List<YelpBusiness> results = Lists.nullToEmpty(response.businesses);

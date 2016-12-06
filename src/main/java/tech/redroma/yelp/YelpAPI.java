@@ -152,10 +152,14 @@ public interface YelpAPI
            
         //Determins whether an OAuth token is fetched immediately after the client is built
         private boolean requestTokenImmediately = false;
-        
+
         /**
          * Creates a new instance of a Builder.
-         * @return 
+         * <p>
+         * The only thing worth customizing is the
+         * {@linkplain #withClientCredentials(java.lang.String, java.lang.String) OAuth Authentication}
+         *
+         * @return
          */
         public static Builder newInstance()
         {
@@ -196,6 +200,16 @@ public interface YelpAPI
             return this;
         }
         
+        /**
+         * If you prefer to obtain an OAuth Token yourself, you can provide it using this method.
+         * <p>
+         * Note that unlike {@link #withClientCredentials(java.lang.String, java.lang.String) }, this token
+         * will not be reloaded when it expires.
+         * 
+         * @param oauthToken
+         * @return
+         * @throws IllegalArgumentException 
+         */
         public Builder withOAuthToken(@NonEmpty String oauthToken) throws IllegalArgumentException
         {
             checkThat(oauthToken)
@@ -206,6 +220,19 @@ public interface YelpAPI
             return this;
         }
         
+        /**
+         * Uses the provided Client ID and Client Secret to obtain an OAuth token from Yelp.
+         * Note that these are also known as {@code 'App ID'} and {@code 'App Secret'}.
+         * <p>
+         * See <a href="https://www.yelp.com/developers/documentation/v3/get_started">Yelp Documentation</a> for more
+         * information.
+         * 
+         * @param cliendId Client ID, also known as 'App ID'.
+         * @param clientSecret Client Secret, also known as 'App Secret'.
+         * @return
+         * @throws IllegalArgumentException 
+         * @see <a href="https://www.yelp.com/developers/documentation/v3/get_started">https://www.yelp.com/developers/documentation/v3/get_started</a>
+         */
         public Builder withClientCredentials(@NonEmpty String cliendId, @NonEmpty String clientSecret) throws IllegalArgumentException
         {
             checkThat(cliendId, clientSecret)
@@ -217,13 +244,27 @@ public interface YelpAPI
             return this;
         }
         
+        /**
+         * When used with {@link #withClientCredentials(java.lang.String, java.lang.String) }, ensures that
+         * an OAuth token is obtained eagerly, before the {@link YelpAPI} is created.
+         * @return 
+         */
         public Builder withEagerAuthentication()
         {
             requestTokenImmediately = true;
             return this;
         }
-        
-        public YelpAPI build()
+
+        /**
+         * Builds a usable {@link YelpAPI}.
+         * <p>
+         * Note that the client credentials must be set using either 
+         * {@link #withClientCredentials(java.lang.String, java.lang.String) } or {@link #withOAuthToken(java.lang.String) }.
+         *
+         * @return
+         * @throws IllegalStateException If the Yelp API is not ready to build.
+         */
+        public YelpAPI build() throws IllegalStateException
         {
             ensureReadyToBuild();
             

@@ -36,31 +36,42 @@ import tech.sirwellington.alchemy.annotations.objects.Pojo;
 @ThreadUnsafe
 public class YelpBusiness
 {
-
+    /** Yelp ID of this business */
     public String id;
-
+    
+    /** Name of the business */
     public String name;
 
+    /** URL for the business page on Yelp */
     public String url;
 
+    /** An integer rating of the business, ranging from (1...5} */
+    //TODO: Change this to a double
     public int rating;
 
     public String phone;
 
+    /** Determines whether the business has permanently closed */
     @SerializedName("is_closed")
     public Boolean isClosed;
 
+    /** A list of categories associated with this business */
     public List<Category> categories;
 
+    /** The number of reviews for this business */
     public int reviewCount;
 
+    /** The geo-coordinates of this business */
     public Coordinate coordinates;
 
+    /** The location of this business, including city, state, zip code. */
     public Address location;
 
+    /** A URL Photo for this business */
     @SerializedName("image_url")
     public String imageURL;
 
+    /** The distance, in meters, from the search location */
     @Optional
     public Double distance;
 

@@ -24,30 +24,43 @@ import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
 /**
+ * Detailed information about a Yelp Business. This can be obtained by calling 
+ * {@link YelpAPI#getBusinessDetails(java.lang.String) }
+ *
+ * <p>
+ * See <a href="https://www.yelp.com/developers/documentation/v3/business">Yelp's Documentaion</a> for more information.
  *
  * @author SirWellington
+ * @see
+ * <a href="https://www.yelp.com/developers/documentation/v3/business">https://www.yelp.com/developers/documentation/v3/business</a>
  */
 @Pojo
 @Mutable
 @ThreadUnsafe
 public class YelpBusinessDetails
 {
-
+    /** The Yelp ID of this business */
     public String id;
 
+    /** The Name of this business */
     public String name;
 
+    /** An URL photo for this business */
     @SerializedName("image_url")
     public String imageURL;
 
+    /** Whether this business has been claimed by a Business Owner */
     @SerializedName("is_claimed")
     public Boolean isClaimed;
 
+    /** Whether the businesss has been permanently closed */
     @SerializedName("is_closed")
     public Boolean isClosed;
 
+    /** URL for the business on Yelp */
     public String url;
 
+    /** The price level of the business. */
     public String price;
 
     public double rating;

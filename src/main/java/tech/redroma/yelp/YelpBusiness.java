@@ -36,42 +36,65 @@ import tech.sirwellington.alchemy.annotations.objects.Pojo;
 @ThreadUnsafe
 public class YelpBusiness
 {
-    /** Yelp ID of this business */
+
+    /**
+     * Yelp ID of this business
+     */
     public String id;
-    
-    /** Name of the business */
+
+    /**
+     * Name of the business
+     */
     public String name;
 
-    /** URL for the business page on Yelp */
+    /**
+     * URL for the business page on Yelp
+     */
     public String url;
 
-    /** An integer rating of the business, ranging from (1...5} */
+    /**
+     * An integer rating of the business, ranging from (1...5}
+     */
     //TODO: Change this to a double
-    public int rating;
+    public Double rating;
 
     public String phone;
 
-    /** Determines whether the business has permanently closed */
+    /**
+     * Determines whether the business has permanently closed
+     */
     @SerializedName("is_closed")
     public Boolean isClosed;
 
-    /** A list of categories associated with this business */
+    /**
+     * A list of categories associated with this business
+     */
     public List<Category> categories;
 
-    /** The number of reviews for this business */
+    /**
+     * The number of reviews for this business
+     */
     public int reviewCount;
 
-    /** The geo-coordinates of this business */
+    /**
+     * The geo-coordinates of this business
+     */
     public Coordinate coordinates;
 
-    /** The location of this business, including city, state, zip code. */
+    /**
+     * The location of this business, including city, state, zip code.
+     */
     public Address location;
 
-    /** A URL Photo for this business */
+    /**
+     * A URL Photo for this business
+     */
     @SerializedName("image_url")
     public String imageURL;
 
-    /** The distance, in meters, from the search location */
+    /**
+     * The distance, in meters, from the search location
+     */
     @Optional
     public Double distance;
 
@@ -79,18 +102,18 @@ public class YelpBusiness
     public int hashCode()
     {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        hash = 37 * hash + Objects.hashCode(this.name);
-        hash = 37 * hash + Objects.hashCode(this.url);
-        hash = 37 * hash + this.rating;
-        hash = 37 * hash + Objects.hashCode(this.phone);
-        hash = 37 * hash + Objects.hashCode(this.isClosed);
-        hash = 37 * hash + Objects.hashCode(this.categories);
-        hash = 37 * hash + this.reviewCount;
-        hash = 37 * hash + Objects.hashCode(this.coordinates);
-        hash = 37 * hash + Objects.hashCode(this.location);
-        hash = 37 * hash + Objects.hashCode(this.imageURL);
-        hash = 37 * hash + Objects.hashCode(this.distance);
+        hash = 53 * hash + Objects.hashCode(this.id);
+        hash = 53 * hash + Objects.hashCode(this.name);
+        hash = 53 * hash + Objects.hashCode(this.url);
+        hash = 53 * hash + Objects.hashCode(this.rating);
+        hash = 53 * hash + Objects.hashCode(this.phone);
+        hash = 53 * hash + Objects.hashCode(this.isClosed);
+        hash = 53 * hash + Objects.hashCode(this.categories);
+        hash = 53 * hash + this.reviewCount;
+        hash = 53 * hash + Objects.hashCode(this.coordinates);
+        hash = 53 * hash + Objects.hashCode(this.location);
+        hash = 53 * hash + Objects.hashCode(this.imageURL);
+        hash = 53 * hash + Objects.hashCode(this.distance);
         return hash;
     }
 
@@ -110,10 +133,6 @@ public class YelpBusiness
             return false;
         }
         final YelpBusiness other = (YelpBusiness) obj;
-        if (this.rating != other.rating)
-        {
-            return false;
-        }
         if (this.reviewCount != other.reviewCount)
         {
             return false;
@@ -135,6 +154,10 @@ public class YelpBusiness
             return false;
         }
         if (!Objects.equals(this.imageURL, other.imageURL))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.rating, other.rating))
         {
             return false;
         }
@@ -166,6 +189,5 @@ public class YelpBusiness
     {
         return "YelpBusiness{" + "id=" + id + ", name=" + name + ", url=" + url + ", rating=" + rating + ", phone=" + phone + ", isClosed=" + isClosed + ", categories=" + categories + ", reviewCount=" + reviewCount + ", coordinates=" + coordinates + ", location=" + location + ", imageURL=" + imageURL + ", distance=" + distance + '}';
     }
-
 
 }

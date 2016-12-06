@@ -38,8 +38,6 @@ import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull;
 import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.validURL;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
-import static java.lang.String.format;
-import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 
 /**
  * This internal class is responsible for implementing the business logic necessary for making Yelp API Queries. It implements all

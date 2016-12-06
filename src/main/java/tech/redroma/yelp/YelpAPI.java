@@ -40,7 +40,7 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.s
 /**
  * The interface used to interact with <a href= "https://www.yelp.com/developers/documentation/v3">Yelp's Developer API</a>.
  * <p>
- * To create, see {@link #newInstance(java.lang.String, java.lang.String) } or {@link YelpAPI.Builder}.
+ * To create an instance, see {@link #newInstance(java.lang.String, java.lang.String) } or {@link YelpAPI.Builder}.
  *
  * @author SirWellington
  * @see <a href= "https://www.yelp.com/developers/documentation/v3">Yelp API</a>
@@ -48,8 +48,13 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.s
 @BuilderPattern(role = PRODUCT)
 public interface YelpAPI 
 {
+    /** The Default Yelp API endpoint */
+    
+    public static final String DEFAULT_BASE_URL = "https://api.yelp.com/v3";
+
     /**
-     * Returns detailed information of a business. This includes things like times-of-operation and additional photos.
+     * Returns detailed information of a business. This includes things like business hours, additional photos, and price
+     * information.
      * <p>
      * Normally, you'll get the {@link YelpBusiness} object from the
      * {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}.
@@ -78,14 +83,15 @@ public interface YelpAPI
     }
 
     /**
-     * Returns detailed information of a business. This includes things like times-of-operation and additional photos.
+     * Returns detailed information of a business. This includes things like business hours, additional photos, and price
+     * information.
      * <p>
      * Normally, you'll get the business id from the
      * {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}.
      * <p>
      * To get review information for a business, refer to ...
-     * 
-     * @param businessId
+     *
+     * @param businessId The {@linkplain YelpBusiness#id Business ID} to query.
      * @return
      * @throws YelpException 
      * @see #getBusinessDetails(java.lang.String) 
@@ -123,38 +129,65 @@ public interface YelpAPI
     static YelpAPI NO_OP = new NoOpYelp();
     
     /**
-     * Use to create a more customized {@link YelpAPI}.
+     * Used to create a more customized {@link YelpAPI}.
+     * 
+     * @see #newInstance() 
+     * @author SirWellington
      */
     @BuilderPattern(role = BUILDER)
     static final class Builder
     {
-        private static final String DEFAULT_BASE_URL = "https://api.yelp.com/v3";
+        
         private static final Logger LOG = LoggerFactory.getLogger(Builder.class);
        
+        //Used to connect to authenticate calls with Yelp
         private OAuthTokenProvider oauthProvider;
         
         private String baseURL = DEFAULT_BASE_URL;
         
+        //The HTTP Client to use; starts with a default client
         private AlchemyHttp http = AlchemyHttp.newBuilder()
             .usingTimeout(60, TimeUnit.SECONDS)
             .build();
-        
+           
+        //Determins whether an OAuth token is fetched immediately after the client is built
         private boolean requestTokenImmediately = false;
         
+        /**
+         * Creates a new instance of a Builder.
+         * @return 
+         */
         public static Builder newInstance()
         {
             return new Builder();
         }
         
+        /**
+         * Sets the base URL to make calls to. Note that this should only be used for testing purposes.
+         * <p>
+         * If this method isn't called, it defaults to {@link #DEFAULT_BASE_URL}.
+         * 
+         * @param baseURL The base URL to use when making API calls. Must be a valid URL and cannot be empty.
+         * @return
+         * @throws IllegalArgumentException 
+         */
         public Builder withBaseURL(@NonEmpty String baseURL) throws IllegalArgumentException
         {
-            checkThat(baseURL)
-                .is(validURL());
+            checkThat(baseURL).is(validURL());
             
             this.baseURL = baseURL;
             return this;
         }
         
+        /**
+         * Sets the {@linkplain AlchemyHttp HTTP Client} to use when making requests.
+         * 
+         * @param http The Alchemy HTTP client to use.
+         * @return
+         * @throws IllegalArgumentException If the client is null
+         * @see AlchemyHttp#newInstance(org.apache.http.client.HttpClient, java.util.concurrent.ExecutorService, java.util.Map) 
+         * @see AlchemyHttp.Builder
+         */
         public Builder withHttpClient(@Required AlchemyHttp http) throws IllegalArgumentException
         {
             checkThat(http).is(notNull());

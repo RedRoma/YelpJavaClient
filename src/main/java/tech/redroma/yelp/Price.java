@@ -16,6 +16,11 @@
 
 package tech.redroma.yelp;
 
+import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
+
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
+
 /**
  *
  * @author SirWellington
@@ -30,13 +35,18 @@ public enum Price
         this.number = number;
     }
     
+    public String asString()
+    {
+        return this.toString();
+    }
+    
     /**
      * Creates a {@link Price} from the given number, which must be in the range (1...4).
      * <pre>
-     * 1 = $
-     * 2 = $$
-     * 3 = $$$
-     * 4 = $$$$
+     *  1 = $
+     *  2 = $$
+     *  3 = $$$
+     *  4 = $$$$
      * </pre>
      * @param number Must be in the range 
      * @return
@@ -54,5 +64,35 @@ public enum Price
         }
         
         throw new IllegalArgumentException("Cannot determine price from number: " + number);
+    }
+    
+    /**
+     * Creates a price from the give string representation.
+     * <p>
+     * Valid values include:
+     * <pre>
+     * + "$"
+     * + "$$"
+     * + "$$$"
+     * + "$$$$"
+     * </pre>
+     * 
+     * @param price
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    public static Price fromString(@NonEmpty String price) throws IllegalArgumentException
+    {
+        checkThat(price).is(nonEmptyString());
+        
+        for (Price p : Price.values())
+        {
+            if (price.equals(p.asString()))
+            {
+                return p;
+            }
+        }
+        
+        throw new IllegalArgumentException("Cannot determine price from: " + price);
     }
 }

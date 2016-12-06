@@ -782,7 +782,7 @@ public final class YelpSearchRequest
          * @param pricingLevels The pricing levels to the filter the search results with (cannot be empty).
          * @return
          * @throws IllegalArgumentException 
-         * @see #withPrices(tech.redroma.yelp.YelpSearchRequest.PricingLevel, tech.redroma.yelp.YelpSearchRequest.PricingLevel...) 
+         * @see #withPrices(tech.redroma.yelp.Price, tech.redroma.yelp.Price...) 
          */
         @Optional
         public Builder withPrices(@NonEmpty List<Price> pricingLevels) throws IllegalArgumentException

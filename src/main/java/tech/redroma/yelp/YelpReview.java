@@ -36,10 +36,32 @@ import tech.sirwellington.alchemy.annotations.objects.Pojo;
 @ThreadUnsafe
 public class YelpReview 
 {
+
+    /**
+     * The raring of the business associated with this review
+     * @see YelpBusiness#rating
+     */
     public int rating;
+    
+    /**
+     * The user who wrote the review
+     * @see User
+     */
     public User user;
+   
+    /**
+     * A Text excerpt of this review.
+     */
     public String text;
+   
+    /**
+     * The time that the review was created, in PST.
+     */
     public Instant timeCreated;
+    
+    /**
+     * A URL of this review.
+     */
     public String url;
     
     @Pojo
@@ -47,8 +69,14 @@ public class YelpReview
     @ThreadUnsafe
     public static class User 
     {
+        /**
+         * The name of the user.
+         */
         public String name;
         
+        /**
+         * A URL of the user's profile picture.
+         */
         @SerializedName("image_url")
         public String imageURL;
     }

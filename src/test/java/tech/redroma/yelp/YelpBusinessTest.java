@@ -43,7 +43,7 @@ import static tech.sirwellington.alchemy.generator.GeolocationGenerators.longitu
  *
  * @author SirWellington
  */
-@Repeat(10)
+@Repeat(25)
 @RunWith(AlchemyTestRunner.class)
 public class YelpBusinessTest
 {

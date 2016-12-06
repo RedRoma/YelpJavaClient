@@ -75,4 +75,12 @@ public class NoOpYelpTest
             
     }
 
+    @Test
+    public void testGetReviewsForBusiness()
+    {
+        List<YelpReview> results = instance.getReviewsForBusiness(businessId);
+        assertThat(results, notNullValue());
+        assertThat(results, is(empty()));
+    }
+
 }

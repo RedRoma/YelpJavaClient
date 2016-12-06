@@ -32,20 +32,20 @@ import tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.stream.Collectors.joining;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.BUILDER;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.BuilderPattern.Role.PRODUCT;
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull;
 import static tech.sirwellington.alchemy.arguments.assertions.CollectionAssertions.nonEmptyList;
 import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLatitude;
 import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLongitude;
+import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.greaterThanOrEqualTo;
+import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.lessThanOrEqualTo;
 import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.positiveInteger;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringContaining;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.stringWithLengthBetween;
-import static java.util.stream.Collectors.joining;
-import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
-import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.greaterThanOrEqualTo;
-import static tech.sirwellington.alchemy.arguments.assertions.NumberAssertions.lessThanOrEqualTo;
 
 /**
  * Use to make search requests to the Yelp API. Use {@link #newBuilder() } to create a request object.
@@ -887,19 +887,19 @@ public final class YelpSearchRequest
             checkThatOnlyOneOfOpenNowOrOpenAtIsSet();
 
             return new YelpSearchRequest(searchTerm,
-                                       location,
-                                       latitude,
-                                       longitude,
-                                       radiusInMeters,
-                                       categories,
-                                       locale,
-                                       limit,
-                                       offset,
-                                       sortBy,
-                                       prices,
-                                       isOpenNow,
-                                       openAt,
-                                       attributes);
+                                         location,
+                                         latitude,
+                                         longitude,
+                                         radiusInMeters,
+                                         categories,
+                                         locale,
+                                         limit,
+                                         offset,
+                                         sortBy,
+                                         prices,
+                                         isOpenNow,
+                                         openAt,
+                                         attributes);
         }
 
         private void checkThatLocationIsSet()

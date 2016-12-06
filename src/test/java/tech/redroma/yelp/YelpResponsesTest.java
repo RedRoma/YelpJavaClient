@@ -41,6 +41,9 @@ public class YelpResponsesTest
     @GeneratePojo
     private YelpResponses.SearchResponse searchResponse;
     
+    @GeneratePojo
+    private YelpResponses.ReviewsResponse reviewsResponse;
+    
     @Before
     public void setUp() throws Exception
     {
@@ -74,4 +77,18 @@ public class YelpResponsesTest
         assertThat(hashCode, not(0));
     }
     
+    @Test
+    public void testReviewsResponse() throws Exception
+    {
+        assertThat(reviewsResponse, notNullValue());
+        assertThat(reviewsResponse.total, greaterThan(0));
+        assertThat(reviewsResponse.reviews, not(empty()));
+    }
+    
+    @Test
+    public void testReviewsResponseHashCode()
+    {
+        int hashCode = reviewsResponse.hashCode();
+        assertThat(hashCode, not(0));
+    }
 }

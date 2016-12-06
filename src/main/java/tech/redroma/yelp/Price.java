@@ -16,9 +16,6 @@
 
 package tech.redroma.yelp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  * @author SirWellington
@@ -33,4 +30,29 @@ public enum Price
         this.number = number;
     }
     
+    /**
+     * Creates a {@link Price} from the given number, which must be in the range (1...4).
+     * <pre>
+     * 1 = $
+     * 2 = $$
+     * 3 = $$$
+     * 4 = $$$$
+     * </pre>
+     * @param number Must be in the range 
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    public static Price fromNumber(int number) throws IllegalArgumentException
+    {
+        
+        for (Price price : Price.values())
+        {
+            if (price.number == number)
+            {
+                return price;
+            }
+        }
+        
+        throw new IllegalArgumentException("Cannot determine price from number: " + number);
+    }
 }

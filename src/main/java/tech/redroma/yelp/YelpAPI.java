@@ -115,6 +115,35 @@ public interface YelpAPI
      */
     List<YelpBusiness> searchForBusinesses(@Required YelpSearchRequest request) throws YelpException;
     
+    /**
+     * Gets the reviews, if any, associated with a Business.
+     * 
+     * @param business The business, obtained from a call to {@link #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) }.
+     * @return
+     * @throws YelpException 
+     */
+    default List<YelpReview> getReviewsForBusiness(@Required YelpBusiness business) throws YelpException
+    {
+        checkThat(business)
+            .throwing(YelpBadArgumentException.class)
+            .is(notNull());
+            
+        checkThat(business.id)
+            .throwing(YelpBadArgumentException.class)
+            .is(nonEmptyString());
+        
+        return getReviewsForBusiness(business.id);
+    }
+    
+    /**
+     * Gets the reviews, if any, associated with a Business. 
+     * 
+     * @param businessId The ID of the business. Obtained from calls to {@link #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) }.
+     * @return
+     * @throws YelpException 
+     */
+    List<YelpReview> getReviewsForBusiness(@NonEmpty String businessId) throws YelpException;
+    
     static YelpAPI newInstance(@NonEmpty String cliendId, @NonEmpty String clientSecret)
     {
         checkThat(cliendId, clientSecret)

@@ -90,16 +90,7 @@ final class YelpAPIImpl implements YelpAPI
     {
         String token = tokenProvider.getToken();
         
-        checkThat(token)
-            .throwing(YelpAuthenticationException.class)
-            .usingMessage("No token available to make API call")
-            .is(nonEmptyString());
-        
-        AlchemyRequest.Step3 httpRequest = http.go()
-            .get()
-            .usingHeader(HeaderParameters.AUTHORIZATION, HeaderParameters.BEARER + " " + token);
-        
-        httpRequest = requestFilledWithParametersFrom(httpRequest, request);
+        AlchemyRequest.Step3 httpRequest = tryToCreateHTTPRequestToSearch(token, request);
         
         String url = baseURL + URLS.BUSINESS_SEARCH;
         
@@ -140,7 +131,28 @@ final class YelpAPIImpl implements YelpAPI
         LOG.info("Received {} results out of {} total for search: {}", results.size(), response.total, request);
         return results;
     }
-    
+
+    @Override
+    public List<YelpReview> getReviewsForBusiness(String businessId) throws YelpException
+    {
+        return Lists.emptyList();
+    }
+
+    private AlchemyRequest.Step3 tryToCreateHTTPRequestToSearch(String token, YelpSearchRequest request)
+    {
+        checkThat(token)
+            .throwing(YelpAuthenticationException.class)
+            .usingMessage("No token available to make API call")
+            .is(nonEmptyString());
+
+        AlchemyRequest.Step3 httpRequest = http.go()
+            .get()
+            .usingHeader(HeaderParameters.AUTHORIZATION, HeaderParameters.BEARER + " " + token);
+
+        httpRequest = requestFilledWithParametersFrom(httpRequest, request);
+        return httpRequest;
+    }
+
     private String createDetailUrlFor(String businessId)
     {
         return format("%s%s/%s", baseURL, URLS.BUSINESSES, businessId);

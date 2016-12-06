@@ -47,4 +47,10 @@ final class NoOpYelp implements YelpAPI
         return Lists.emptyList();
     }
 
+    @Override
+    public List<YelpReview> getReviewsForBusiness(String businessId) throws YelpException
+    {
+        return Lists.emptyList();
+    }
+
 }

@@ -63,7 +63,7 @@ public class YelpBusinessDetails
     /** The price level of the business. */
     public String price;
 
-    public double rating;
+    public Double rating;
 
     public int reviewCount;
 
@@ -84,21 +84,21 @@ public class YelpBusinessDetails
     public int hashCode()
     {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        hash = 37 * hash + Objects.hashCode(this.name);
-        hash = 37 * hash + Objects.hashCode(this.imageURL);
-        hash = 37 * hash + Objects.hashCode(this.isClaimed);
-        hash = 37 * hash + Objects.hashCode(this.isClosed);
-        hash = 37 * hash + Objects.hashCode(this.url);
-        hash = 37 * hash + Objects.hashCode(this.price);
-        hash = 37 * hash + (int) (Double.doubleToLongBits(this.rating) ^ (Double.doubleToLongBits(this.rating) >>> 32));
-        hash = 37 * hash + this.reviewCount;
-        hash = 37 * hash + Objects.hashCode(this.phone);
-        hash = 37 * hash + Objects.hashCode(this.photosURLS);
-        hash = 37 * hash + Objects.hashCode(this.hours);
-        hash = 37 * hash + Objects.hashCode(this.categories);
-        hash = 37 * hash + Objects.hashCode(this.coordinates);
-        hash = 37 * hash + Objects.hashCode(this.location);
+        hash = 89 * hash + Objects.hashCode(this.id);
+        hash = 89 * hash + Objects.hashCode(this.name);
+        hash = 89 * hash + Objects.hashCode(this.imageURL);
+        hash = 89 * hash + Objects.hashCode(this.isClaimed);
+        hash = 89 * hash + Objects.hashCode(this.isClosed);
+        hash = 89 * hash + Objects.hashCode(this.url);
+        hash = 89 * hash + Objects.hashCode(this.price);
+        hash = 89 * hash + Objects.hashCode(this.rating);
+        hash = 89 * hash + this.reviewCount;
+        hash = 89 * hash + Objects.hashCode(this.phone);
+        hash = 89 * hash + Objects.hashCode(this.photosURLS);
+        hash = 89 * hash + Objects.hashCode(this.hours);
+        hash = 89 * hash + Objects.hashCode(this.categories);
+        hash = 89 * hash + Objects.hashCode(this.coordinates);
+        hash = 89 * hash + Objects.hashCode(this.location);
         return hash;
     }
 
@@ -118,10 +118,6 @@ public class YelpBusinessDetails
             return false;
         }
         final YelpBusinessDetails other = (YelpBusinessDetails) obj;
-        if (Double.doubleToLongBits(this.rating) != Double.doubleToLongBits(other.rating))
-        {
-            return false;
-        }
         if (this.reviewCount != other.reviewCount)
         {
             return false;
@@ -155,6 +151,10 @@ public class YelpBusinessDetails
             return false;
         }
         if (!Objects.equals(this.isClosed, other.isClosed))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.rating, other.rating))
         {
             return false;
         }

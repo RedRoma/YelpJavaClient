@@ -53,7 +53,7 @@ public class YelpBusinessDetails
     @SerializedName("is_claimed")
     public Boolean isClaimed;
 
-    /** Whether the businesss has been permanently closed */
+    /** Whether the businesses has been permanently closed */
     @SerializedName("is_closed")
     public Boolean isClosed;
 

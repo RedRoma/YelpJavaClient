@@ -25,7 +25,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
 /**
- *
+ * Internal class for extracting Yelp's Responses.
  * @author SirWellington
  */
 @Internal
@@ -48,8 +48,10 @@ final class YelpResponses
     @Internal
     static class SearchResponse
     {
-
+        
+        /** Represents the total number of businesses that matched the search query */
         public int total;
+        /** The Businesses returned from Yelp */
         public List<YelpBusiness> businesses;
 
         SearchResponse()

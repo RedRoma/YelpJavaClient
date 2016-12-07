@@ -20,9 +20,15 @@ package tech.redroma.yelp;
 
 import com.google.gson.annotations.SerializedName;
 import java.time.Instant;
+import java.util.Objects;
+import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
+
+import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
+import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.validURL;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
 
 
 /**
@@ -63,21 +69,88 @@ public class YelpReview
      * A URL of this review.
      */
     public String url;
-    
+  
     @Pojo
     @Mutable
     @ThreadUnsafe
-    public static class User 
+    public static class User
     {
+
         /**
          * The name of the user.
          */
         public String name;
-        
+
         /**
          * A URL of the user's profile picture.
          */
         @SerializedName("image_url")
         public String imageURL;
+
+        /**
+         * Creates a {@link User} from the specified arguments.
+         *
+         * @param name
+         * @param imageURL
+         * @return
+         */
+        public static User with(@NonEmpty String name, @NonEmpty String imageURL)
+        {
+            checkThat(name).is(nonEmptyString());
+            checkThat(imageURL).is(validURL());
+
+            User user = new User();
+            user.name = name;
+            user.imageURL = imageURL;
+
+            return user;
+        }
+
+        public User()
+        {
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int hash = 7;
+            hash = 41 * hash + Objects.hashCode(this.name);
+            hash = 41 * hash + Objects.hashCode(this.imageURL);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+            if (obj == null)
+            {
+                return false;
+            }
+            if (getClass() != obj.getClass())
+            {
+                return false;
+            }
+            final User other = (User) obj;
+            if (!Objects.equals(this.name, other.name))
+            {
+                return false;
+            }
+            if (!Objects.equals(this.imageURL, other.imageURL))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public String toString()
+        {
+            return "User{" + "name=" + name + ", imageURL=" + imageURL + '}';
+        }
+
     }
 }

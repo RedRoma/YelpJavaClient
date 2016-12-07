@@ -65,23 +65,34 @@ public class YelpBusinessDetails
     /** The price level of the business. */
     public String price;
 
+    /** Rating for this business. Ranges from (1...5). */
     public Double rating;
 
+    /** The number of reviews for this business. */
     public int reviewCount;
 
+    /** The phone number of this business, if available. */
     public String phone;
 
+    /** The URLs of up to 3 photos. */
     @SerializedName("photos")
     public List<String> photosURLS;
 
+    /** Opening hours of the business. */
     public List<Hours> hours;
 
+    /** A list of categories associated with this business. */
     public List<Category> categories;
 
+    /** The Geo-Coordinate (latitude-longitude) of this business. */
     public Coordinate coordinates;
 
+    /** The physical address of this business. */
     public Address location;
-    
+
+    /**
+     * @return The {@link #price} as a {@link Price}.
+     */
     public Price getPriceLevel()
     {
         if (isNullOrEmpty(price))
@@ -92,6 +103,7 @@ public class YelpBusinessDetails
         return Price.fromString(price);
     }
 
+    @Override
     public int hashCode()
     {
         int hash = 7;
@@ -204,20 +216,55 @@ public class YelpBusinessDetails
     public static class Hours
     {
 
+        /**
+         * The type of opening hours information. Right now, it is always {@code 'REGULAR'}.
+         */
         @SerializedName("hours_type")
         public String hoursType;
 
+        /**
+         * Whether the business is open at the time of the request.
+         */
         @SerializedName("is_open_now")
         public Boolean isOpenNow;
 
+        /**
+         * A detailed list of opening hours for the business throughout the week.
+         */
         public List<OpenTimes> open;
 
         public static class OpenTimes
         {
 
+            /**
+             * From 0 to 6, represents the day of the week from Monday to Sunday (respectively).
+             * Notice that you may get the same
+             * day of the week more than once if the business has more than one opening time slots.
+             */
             public int day;
+            /**
+             * Start of the opening hours in a day, in 24-hour clock notation.
+             * <pre>
+             * 300 = 3am
+             * 1000 = 10am
+             * 1800 = 6pm
+             * </pre>
+             */
             public String start;
+            /**
+             * End of the opening hours in a day, in 24-hour clock notation.
+             * <pre>
+             * 300 = 3am
+             * 1000 = 10am
+             * 1800 = 6pm
+             * </pre>
+             */
             public String end;
+            
+            /**
+             * Whether the business opens overnight or not. When this is true, the end time will be lower than the start time, as
+             * it signifies the end time is in the following day.
+             */
             @SerializedName("is_overnight")
             public Boolean isOvernight;
 

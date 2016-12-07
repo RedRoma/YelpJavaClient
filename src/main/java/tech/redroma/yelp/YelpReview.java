@@ -101,6 +101,11 @@ public class YelpReview
         return !isNullOrEmpty(url);
     }
     
+    /**
+     * Gets the {@link #timeCreated} as a Java {@link ZonedDateTime}, if available.
+     * 
+     * @return ZonedDateTime representation of {@link #timeCreated}, or {@code null}.
+     */
     public ZonedDateTime getDateTimeCreated()
     {
         if (!hasTimeCreated())

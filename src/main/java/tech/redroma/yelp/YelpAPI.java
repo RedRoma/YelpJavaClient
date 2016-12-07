@@ -59,7 +59,7 @@ public interface YelpAPI
      * Normally, you'll get the {@link YelpBusiness} object from the
      * {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}.
      * <p>
-     * To get review information for a business, refer to ...
+     * To get review information for a business, refer to {@link #getReviewsForBusiness(java.lang.String) }.
      *
      * @param business The business to get more details of.
      * @return
@@ -89,7 +89,7 @@ public interface YelpAPI
      * Normally, you'll get the business id from the
      * {@linkplain #searchForBusinesses(tech.redroma.yelp.YelpSearchRequest) search API}.
      * <p>
-     * To get review information for a business, refer to ...
+     * To get review information for a business, refer to {@link #getReviewsForBusiness(java.lang.String) }.
      *
      * @param businessId The {@linkplain YelpBusiness#id Business ID} to query.
      * @return

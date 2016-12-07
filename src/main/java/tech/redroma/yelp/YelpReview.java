@@ -19,7 +19,6 @@ package tech.redroma.yelp;
 
 
 import com.google.gson.annotations.SerializedName;
-import java.time.Instant;
 import java.util.Objects;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
@@ -40,36 +39,95 @@ import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.n
 @Pojo
 @Mutable
 @ThreadUnsafe
-public class YelpReview 
+public class YelpReview
 {
 
     /**
      * The raring of the business associated with this review
+     *
      * @see YelpBusiness#rating
      */
-    public int rating;
-    
+    public Double rating;
+
     /**
      * The user who wrote the review
+     *
      * @see User
      */
     public User user;
-   
+
     /**
      * A Text excerpt of this review.
      */
     public String text;
-   
+
     /**
      * The time that the review was created, in PST.
      */
-    public Instant timeCreated;
-    
+    public String timeCreated;
+
     /**
      * A URL of this review.
      */
     public String url;
-  
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.rating);
+        hash = 13 * hash + Objects.hashCode(this.user);
+        hash = 13 * hash + Objects.hashCode(this.text);
+        hash = 13 * hash + Objects.hashCode(this.timeCreated);
+        hash = 13 * hash + Objects.hashCode(this.url);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final YelpReview other = (YelpReview) obj;
+        if (!Objects.equals(this.text, other.text))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.timeCreated, other.timeCreated))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.url, other.url))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.rating, other.rating))
+        {
+            return false;
+        }
+        if (!Objects.equals(this.user, other.user))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "YelpReview{" + "rating=" + rating + ", user=" + user + ", text=" + text + ", timeCreated=" + timeCreated + ", url=" + url + '}';
+    }
+
     @Pojo
     @Mutable
     @ThreadUnsafe

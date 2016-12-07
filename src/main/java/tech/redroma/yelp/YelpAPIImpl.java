@@ -246,22 +246,18 @@ final class YelpAPIImpl implements YelpAPI
         {
             LOG.error("Failed to mkae Alchemy HTTP Call at [{]]", url, ex);
 
-            if (ex.hasResponse())
+            if (isBadRequest(ex))
             {
-                int statusCode = ex.getResponse().statusCode();
-
-                if (statusCode == 400)
-                {
-                    throw new YelpBadArgumentException("Bad Request", ex);
-                }
-
-                if (statusCode == 401)
-                {
-                    throw new YelpAuthenticationException("Invalid token", ex);
-                }
+                throw new YelpBadArgumentException("Bad Request", ex);
             }
-
-            throw new YelpOperationFailedException("Yelp call failed", ex);
+            else if (isBadAuth(ex))
+            {
+                throw new YelpAuthenticationException("Invalid token", ex);
+            }
+            else
+            {
+                throw new YelpOperationFailedException("Yelp call failed", ex);
+            }
         }
         catch (Exception ex)
         {

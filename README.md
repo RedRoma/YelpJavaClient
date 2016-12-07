@@ -104,6 +104,8 @@ We do not yet support the following API calls:
 
 We used [**Alchemy Design Principles**](https://github.com/SirWellington/alchemy) when designing this library.
 
+[<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v7-name.png" width="200">](https://github.com/SirWellington/alchemy)
+
 ### Swift
 We wanted our code to feel like it was barely there. This meant keeping things minimal and light.
 
@@ -114,8 +116,10 @@ Yelp already designed a great intuitive API. We didn't want to add a pool of unn
 Nearly everything is unit tested, and it is already being used in production by [BlackNectar](http://docs.blacknectarapi.apiary.io/), and others.
 
 ### Invigorating
-We wanted you to have fun, and to feel powerful.
-
+We wanted you to have fun, and to feel powerful.   
+We ditched the no-fun java `get() set()` pojo style in favor of open `public`
+ variables. We trust you.
+ 
 # License
 
 This Software is licensed under the Apache 2.0 License

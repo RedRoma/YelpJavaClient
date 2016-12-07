@@ -100,4 +100,26 @@ public class YelpAPIIT
         
     }
     
+    @Test
+    public void testGetBusinessReviews() throws Exception
+    {
+        if (yelp == null)
+        {
+            return;
+        }
+        
+        request = YelpSearchRequest.newBuilder()
+            .withSearchTerm("Grocery")
+            .withCoordinate(Coordinate.of(34.018363, -118.492343))
+            .withLimit(5)
+            .build();
+        
+        List<YelpBusiness> results = yelp.searchForBusinesses(request);
+        YelpBusiness business = Lists.oneOf(results);
+        
+        List<YelpReview> reviews = yelp.getReviewsForBusiness(business);
+        
+        LOG.info("Successfully loaded reviews for business: {}", reviews);
+    }
+    
 }

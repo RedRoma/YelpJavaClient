@@ -156,6 +156,12 @@ final class YelpResponses
             return true;
         }
 
+        @Override
+        public String toString()
+        {
+            return "ReviewsResponse{" + "total=" + total + ", reviews=" + reviews + '}';
+        }
+
     }
 
 }

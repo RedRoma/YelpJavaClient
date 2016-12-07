@@ -16,6 +16,8 @@
 
 package tech.redroma.yelp;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,7 @@ import tech.sirwellington.alchemy.test.junit.runners.DontRepeat;
 import tech.sirwellington.alchemy.test.junit.runners.GeneratePojo;
 import tech.sirwellington.alchemy.test.junit.runners.Repeat;
 
+import static java.time.ZoneId.of;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -48,6 +51,9 @@ public class YelpReviewTest
     @Before
     public void setUp() throws Exception
     {
+        LocalDateTime time = LocalDateTime.now(of("America/Los_Angeles"));
+        
+        instance.timeCreated = time.toString();
     }
 
     @DontRepeat
@@ -83,5 +89,56 @@ public class YelpReviewTest
     {
         assertThat(first.hashCode(), is(first.hashCode()));
         assertThat(first.hashCode(), not(second.hashCode()));
+    }
+
+    @Test
+    public void testHasRating()
+    {
+        assertTrue(instance.hasRating());
+        instance.rating = null;
+        assertFalse(instance.hasRating());
+    }
+
+    @Test
+    public void testHasUser()
+    {
+        assertTrue(instance.hasUser());
+        instance.user = null;
+        assertFalse(instance.hasUser());
+    }
+
+    @Test
+    public void testHasText()
+    {
+        assertTrue(instance.hasText());
+        instance.text = null;
+        assertFalse(instance.hasText());
+    }
+
+    @Test
+    public void testHasTimeCreated()
+    {
+        assertTrue(instance.hasTimeCreated());
+        instance.timeCreated = null;
+        assertFalse(instance.hasTimeCreated());
+    }
+
+    @Test
+    public void testHasURL()
+    {
+        assertTrue(instance.hasURL());
+        instance.url = null;
+        assertFalse(instance.hasURL());
+    }
+
+    @Test
+    public void testGetDateTimeCreated()
+    {
+        ZonedDateTime time = instance.getDateTimeCreated();
+        assertThat(time, notNullValue());
+        
+        LocalDateTime localTime = LocalDateTime.parse(instance.timeCreated);
+        ZonedDateTime expectedTime = ZonedDateTime.of(localTime, of("America/Los_Angeles"));
+        assertThat(time, is(expectedTime));
     }
 }

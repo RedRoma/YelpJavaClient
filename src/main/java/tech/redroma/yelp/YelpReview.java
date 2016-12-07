@@ -19,12 +19,17 @@ package tech.redroma.yelp;
 
 
 import com.google.gson.annotations.SerializedName;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.validURL;
 import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
@@ -70,6 +75,44 @@ public class YelpReview
      * A URL of this review.
      */
     public String url;
+    
+    public boolean hasRating()
+    {
+        return Objects.nonNull(rating);
+    }
+    
+    public boolean hasUser()
+    {
+        return user != null;
+    }
+    
+    public boolean hasText()
+    {
+        return !isNullOrEmpty(text);
+    }
+    
+    public boolean hasTimeCreated()
+    {
+        return !isNullOrEmpty(timeCreated);
+    }
+    
+    public boolean hasURL()
+    {
+        return !isNullOrEmpty(url);
+    }
+    
+    public ZonedDateTime getDateTimeCreated()
+    {
+        if (!hasTimeCreated())
+        {
+            return null;
+        }
+        
+        ZoneId pst = ZoneOffset.of("PST", ZoneOffset.SHORT_IDS);
+        LocalDateTime localTime = LocalDateTime.parse(timeCreated);
+        
+        return ZonedDateTime.of(localTime, pst);
+    }
 
     @Override
     public int hashCode()

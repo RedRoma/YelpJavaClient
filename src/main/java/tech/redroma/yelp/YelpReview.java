@@ -76,26 +76,41 @@ public class YelpReview
      */
     public String url;
     
+    /**
+     * @return Whether this review has a rating.
+     */
     public boolean hasRating()
     {
         return Objects.nonNull(rating);
     }
     
+    /**
+     * @return Whether this review has a user.
+     */
     public boolean hasUser()
     {
         return user != null;
     }
     
+    /**
+     * @return Whether this review has a text excerpt.
+     */
     public boolean hasText()
     {
         return !isNullOrEmpty(text);
     }
     
+    /**
+     * @return Whether this review has a creation time.
+     */
     public boolean hasTimeCreated()
     {
         return !isNullOrEmpty(timeCreated);
     }
     
+    /**
+     * @return Whether this review has a URL.
+     */
     public boolean hasURL()
     {
         return !isNullOrEmpty(url);

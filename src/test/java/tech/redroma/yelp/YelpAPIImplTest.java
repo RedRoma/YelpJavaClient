@@ -22,8 +22,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import tech.redroma.yelp.YelpAPIImpl.URLS;
 import tech.redroma.yelp.exceptions.YelpAuthenticationException;
+import tech.redroma.yelp.exceptions.YelpBadArgumentException;
 import tech.redroma.yelp.exceptions.YelpException;
+import tech.redroma.yelp.exceptions.YelpOperationFailedException;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
 import tech.sirwellington.alchemy.http.HttpResponse;
@@ -75,6 +78,9 @@ public class YelpAPIImplTest
     @GeneratePojo
     private YelpResponses.SearchResponse searchResponse;
     
+    @GeneratePojo
+    private YelpResponses.ReviewsResponse reviewsResponse;
+    
     private List<YelpBusiness> businesses;
     
     private YelpSearchRequest request;
@@ -96,6 +102,8 @@ public class YelpAPIImplTest
     private String expectedGetBusinessDetailsURL;
     
     private String expectedSearchURL;
+    
+    private String expectedReviewsURL;
     
     @Before
     public void setUp() throws Exception
@@ -121,8 +129,9 @@ public class YelpAPIImplTest
             .withLocale(enumValueOf(Locale.Locales.class).get())
             .build();
         
-        expectedGetBusinessDetailsURL = baseURL + YelpAPIImpl.URLS.BUSINESSES + "/" + businessID;
-        expectedSearchURL = baseURL + YelpAPIImpl.URLS.BUSINESS_SEARCH;
+        expectedGetBusinessDetailsURL = baseURL + URLS.BUSINESSES + "/" + businessID;
+        expectedSearchURL = baseURL + URLS.BUSINESS_SEARCH;
+        expectedReviewsURL = baseURL + URLS.BUSINESSES + "/" + businessID + URLS.REVIEWS;
     }
     
     private void setupMocks() throws Exception
@@ -170,9 +179,7 @@ public class YelpAPIImplTest
     @Test
     public void testGetBusinessDetailsWhenTokenInvalid() throws Exception
     {
-        HttpResponse fakeResponse = mock(HttpResponse.class);
-        when(fakeResponse.statusCode()).thenReturn(401);
-        Exception ex = new AlchemyHttpException(fakeResponse);
+        Exception ex = createAlchemyExceptionWithStatus(401);
         
         http = AlchemyHttpMock.begin()
             .whenGet()
@@ -227,10 +234,8 @@ public class YelpAPIImplTest
     @Test
     public void testSearchForBusinessesWhenTokenInvalid() throws Exception
     {
-        HttpResponse fakeResponse = mock(HttpResponse.class);
-        when(fakeResponse.statusCode()).thenReturn(401);
-        Exception ex = new AlchemyHttpException(fakeResponse);
-
+        AlchemyHttpException ex = createAlchemyExceptionWithStatus(401);
+        
         http = AlchemyHttpMock.begin()
             .whenGet()
             .noBody()
@@ -243,5 +248,93 @@ public class YelpAPIImplTest
         assertThrows(() -> instance.searchForBusinesses(request))
             .isInstanceOf(YelpAuthenticationException.class);
     }
+
+    @Test
+    public void testGetReviewsForBusiness() throws Exception
+    {
+        
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .noBody()
+            .at(expectedReviewsURL)
+            .thenReturnPOJO(reviewsResponse)
+            .build();
+        
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        List<YelpReview> results = instance.getReviewsForBusiness(businessID);
+        
+        assertThat(results, is(reviewsResponse.reviews));
+        
+        AlchemyHttpMock.verifyAllRequestsMade(http);
+    }
     
+    @Test
+    public void testGetReviewsForBusinessWhenBadArguments() throws Exception
+    {
+        AlchemyHttpException ex = createAlchemyExceptionWithStatus(400);
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .noBody()
+            .at(expectedReviewsURL)
+            .thenThrow(ex)
+            .build();
+        
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        assertThrows(() -> instance.getReviewsForBusiness(businessID))
+            .isInstanceOf(YelpBadArgumentException.class);
+    }
+    
+    @Test
+    public void testGetReviewsForBusinessWhenOperationFails() throws Exception
+    {
+        AlchemyHttpException ex = createAlchemyExceptionWithStatus(500);
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .noBody()
+            .at(expectedReviewsURL)
+            .thenThrow(ex)
+            .build();
+        
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        assertThrows(() -> instance.getReviewsForBusiness(businessID))
+            .isInstanceOf(YelpOperationFailedException.class);
+    }
+
+    @Test
+    public void testGetReviewsForBusinessWhenTokenInvalid() throws Exception
+    {
+        AlchemyHttpException ex = createAlchemyExceptionWithStatus(401);
+        
+        http = AlchemyHttpMock.begin()
+            .whenGet()
+            .noBody()
+            .at(expectedReviewsURL)
+            .thenThrow(ex)
+            .build();
+        
+        instance = new YelpAPIImpl(http, tokenProvider, baseURL.toString());
+        
+        assertThrows(() -> instance.getReviewsForBusiness(businessID))
+            .isInstanceOf(YelpAuthenticationException.class);
+    }
+
+    private AlchemyHttpException createAlchemyExceptionWithStatus(int code)
+    {
+        HttpResponse fakeResponse = createFakeHttpResponseWithCode(code);
+        AlchemyHttpException ex = new AlchemyHttpException(fakeResponse);
+        return ex;
+    }
+
+    private HttpResponse createFakeHttpResponseWithCode(int code)
+    {
+        HttpResponse fakeResponse = mock(HttpResponse.class);
+        when(fakeResponse.statusCode()).thenReturn(code);
+        return fakeResponse;
+    }
+
+
+
 }

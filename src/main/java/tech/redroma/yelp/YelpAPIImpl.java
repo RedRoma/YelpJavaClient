@@ -59,16 +59,16 @@ final class YelpAPIImpl implements YelpAPI
     {
         checkThat(http, tokenProvider)
             .are(notNull());
-        
+
         checkThat(baseURL)
             .is(nonEmptyString())
             .is(validURL());
-        
+
         this.http = http;
         this.tokenProvider = tokenProvider;
         this.baseURL = baseURL;
     }
-    
+
     @Override
     public YelpBusinessDetails getBusinessDetails(String businessId) throws YelpException
     {
@@ -76,21 +76,21 @@ final class YelpAPIImpl implements YelpAPI
             .throwing(YelpBadArgumentException.class)
             .usingMessage("Business ID cannot be empty")
             .is(nonEmptyString());
-        
+
         String url = createDetailUrlFor(businessId);
-        
+
         YelpBusinessDetails details = tryToGetDetailsAt(url);
-        
+
         return details;
-        
+
     }
-    
+
     @Override
     public List<YelpBusiness> searchForBusinesses(YelpSearchRequest request) throws YelpException
     {
         String token = tokenProvider.getToken();
-        
-        AlchemyRequest.Step3 httpRequest = tryToCreateHTTPRequestToSearch(token, request);
+        checkToken(token);
+        AlchemyRequest.Step3 httpRequest = createHTTPRequestToSearch(token, request);
         
         String url = baseURL + URLS.BUSINESS_SEARCH;
         
@@ -135,16 +135,32 @@ final class YelpAPIImpl implements YelpAPI
     @Override
     public List<YelpReview> getReviewsForBusiness(String businessId) throws YelpException
     {
+        String token = tokenProvider.getToken();
+        checkToken(token);
+        
+        String url = createUrlToGetReviewsFor(businessId);
+        
+        YelpResponses.ReviewsResponse response = tryToGetReviewsAt(url, token);
+        
+        if (Objects.nonNull(response))
+        {
+            LOG.debug("Found {} total reviews for business {}", response.total, businessId);
+            return Lists.nullToEmpty(response.reviews);
+        }
+        
         return Lists.emptyList();
     }
-
-    private AlchemyRequest.Step3 tryToCreateHTTPRequestToSearch(String token, YelpSearchRequest request)
+    
+    private void checkToken(String token) throws YelpAuthenticationException
     {
         checkThat(token)
             .throwing(YelpAuthenticationException.class)
             .usingMessage("No token available to make API call")
             .is(nonEmptyString());
-
+    }
+    
+    private AlchemyRequest.Step3 createHTTPRequestToSearch(String token, YelpSearchRequest request)
+    {
         AlchemyRequest.Step3 httpRequest = http.go()
             .get()
             .usingHeader(HeaderParameters.AUTHORIZATION, HeaderParameters.BEARER + " " + token);
@@ -156,6 +172,11 @@ final class YelpAPIImpl implements YelpAPI
     private String createDetailUrlFor(String businessId)
     {
         return format("%s%s/%s", baseURL, URLS.BUSINESSES, businessId);
+    }
+    
+    private String createUrlToGetReviewsFor(String businessId)
+    {
+        return format("%s%s/%s%s", baseURL, URLS.BUSINESSES, businessId, URLS.REVIEWS);
     }
     
     private YelpBusinessDetails tryToGetDetailsAt(String url)
@@ -206,7 +227,50 @@ final class YelpAPIImpl implements YelpAPI
             throw new YelpOperationFailedException(ex);
         }
     }
-    
+
+    private YelpResponses.ReviewsResponse tryToGetReviewsAt(String url, String token) throws YelpException
+    {
+        checkThat(url).is(validURL());
+        checkThat(token).is(nonEmptyString());
+
+        try
+        {
+            return http
+                .go()
+                .get()
+                .usingHeader(HeaderParameters.AUTHORIZATION, HeaderParameters.BEARER + " " + token)
+                .expecting(YelpResponses.ReviewsResponse.class)
+                .at(url);
+        }
+        catch (AlchemyHttpException ex)
+        {
+            LOG.error("Failed to mkae Alchemy HTTP Call at [{]]", url, ex);
+
+            if (ex.hasResponse())
+            {
+                int statusCode = ex.getResponse().statusCode();
+
+                if (statusCode == 400)
+                {
+                    throw new YelpBadArgumentException("Bad Request", ex);
+                }
+
+                if (statusCode == 401)
+                {
+                    throw new YelpAuthenticationException("Invalid token", ex);
+                }
+            }
+
+            throw new YelpOperationFailedException("Yelp call failed", ex);
+        }
+        catch (Exception ex)
+        {
+            LOG.error("Failed to make HTTP Call at [{}]", url, ex);
+            throw new YelpOperationFailedException("Yelp call failed to URL: " + url, ex);
+        }
+    }
+
+
     private AlchemyRequest.Step3 requestFilledWithParametersFrom(AlchemyRequest.Step3 httpRequest, YelpSearchRequest request)
     {
         

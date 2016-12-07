@@ -19,6 +19,7 @@ package tech.redroma.yelp;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import java.util.Objects;
+import sir.wellington.alchemy.collections.lists.Lists;
 import tech.sirwellington.alchemy.annotations.concurrency.Mutable;
 import tech.sirwellington.alchemy.annotations.concurrency.ThreadUnsafe;
 import tech.sirwellington.alchemy.annotations.objects.Pojo;
@@ -101,6 +102,20 @@ public class YelpBusinessDetails
         }
         
         return Price.fromString(price);
+    }
+    
+    /**
+     * @return Whether this business is open now or not.
+     */
+    public boolean isOpenNow()
+    {
+        if (Lists.isEmpty(hours))
+        {
+            return false;
+        }
+       
+        return hours.stream()
+            .anyMatch(h -> h.isOpenNow);
     }
 
     @Override

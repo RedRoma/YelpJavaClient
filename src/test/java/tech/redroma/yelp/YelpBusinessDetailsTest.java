@@ -21,6 +21,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import sir.wellington.alchemy.collections.lists.Lists;
 import tech.sirwellington.alchemy.generator.AlchemyGenerator;
 import tech.sirwellington.alchemy.generator.StringGenerators;
 import tech.sirwellington.alchemy.test.junit.runners.AlchemyTestRunner;
@@ -34,7 +35,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static tech.redroma.yelp.Resources.GSON;
 import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
 import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAssertions.validLatitude;
@@ -214,5 +217,33 @@ public class YelpBusinessDetailsTest
     private AlchemyGenerator<String> prices()
     {
         return StringGenerators.stringsFromFixedList("$", "$$", "$$$", "$$$$");
+    }
+
+    @DontRepeat
+    @Test
+    public void testIsOpenNowWhenOpen()
+    {
+        YelpBusinessDetails.Hours hours = new YelpBusinessDetails.Hours();
+        hours.isOpenNow = true;
+        hours.hoursType = "REGULAR";
+        hours.open = Lists.emptyList();
+        
+        instance.hours = Lists.createFrom(hours);
+        
+        assertTrue(instance.isOpenNow());
+    }
+   
+    @DontRepeat
+    @Test
+    public void testIsOpenNowWhenClosed()
+    {
+        YelpBusinessDetails.Hours hours = new YelpBusinessDetails.Hours();
+        hours.isOpenNow = false;
+        hours.hoursType = "REGULAR";
+        hours.open = Lists.emptyList();
+
+        instance.hours = Lists.createFrom(hours);
+
+        assertFalse(instance.isOpenNow());
     }
 }

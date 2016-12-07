@@ -41,25 +41,25 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 @ThreadUnsafe
 public class YelpBusinessDetails
 {
-    /** The Yelp ID of this business */
+    /** The Yelp ID of this business. */
     public String id;
 
-    /** The Name of this business */
+    /** The Name of this business. */
     public String name;
 
-    /** An URL photo for this business */
+    /** An URL photo for this business. */
     @SerializedName("image_url")
     public String imageURL;
 
-    /** Whether this business has been claimed by a Business Owner */
+    /** Whether this business has been claimed by a Business Owner. */
     @SerializedName("is_claimed")
     public Boolean isClaimed;
 
-    /** Whether the businesses has been permanently closed */
+    /** Whether the businesses has been permanently closed. */
     @SerializedName("is_closed")
     public Boolean isClosed;
 
-    /** URL for the business on Yelp */
+    /** URL for the business on Yelp. */
     public String url;
 
     /** The price level of the business. */

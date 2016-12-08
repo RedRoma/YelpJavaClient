@@ -7,7 +7,7 @@ YelpJavaClient
 
 ---
 
-The **YelpJavaClient** provides
+The **YelpJavaClient** provides a simple Java interface for interacting with Yelp's API.
 
 ## Download
 
@@ -119,7 +119,7 @@ Nearly everything is unit tested, and it is already being used in production by 
 We wanted you to have fun, and to feel powerful.   
 We ditched the no-fun java `get() set()` pojo style in favor of open `public`
  variables. We trust you.
- 
+
 # License
 
 This Software is licensed under the Apache 2.0 License

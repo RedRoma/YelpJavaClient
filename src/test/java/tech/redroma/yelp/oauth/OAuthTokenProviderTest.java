@@ -86,7 +86,7 @@ public class OAuthTokenProviderTest
     @Test
     public void testNewRefreshingTokenProvider_String_String()
     {
-        OAuthTokenProvider result = OAuthTokenProvider.newRefeshingTokenProvider(cliendId, cliendSecret, authURL);
+        OAuthTokenProvider result = OAuthTokenProvider.newRefreshingTokenProvider(cliendId, cliendSecret, authURL);
         assertThat(result, notNullValue());
     }
 

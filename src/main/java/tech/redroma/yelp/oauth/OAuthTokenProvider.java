@@ -73,7 +73,7 @@ public interface OAuthTokenProvider
         try
         {
             URL authURL = new URL(DEFAULT_AUTH_URL);
-            return newRefeshingTokenProvider(clientId, clientSecret, authURL);
+            return newRefreshingTokenProvider(clientId, clientSecret, authURL);
         }
         catch (MalformedURLException ex)
         {
@@ -88,8 +88,8 @@ public interface OAuthTokenProvider
      * @return
      * @throws IllegalArgumentException
      */
-    public static OAuthTokenProvider newRefeshingTokenProvider(@NonEmpty String clientId, @NonEmpty String clientSecret,
-                                                               @Required URL authURL) throws IllegalArgumentException
+    public static OAuthTokenProvider newRefreshingTokenProvider(@NonEmpty String clientId, @NonEmpty String clientSecret,
+                                                                @Required URL authURL) throws IllegalArgumentException
     {
         AlchemyHttp http = AlchemyHttp.Factory.newDefaultInstance();
 

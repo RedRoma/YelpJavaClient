@@ -36,6 +36,7 @@ import static tech.sirwellington.alchemy.arguments.assertions.GeolocationAsserti
 @ThreadUnsafe
 public class Coordinate 
 {
+
     double latitude;
     double longitude;
 

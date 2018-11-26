@@ -73,16 +73,13 @@ public class YelpBusinessDetailsTest
 
     private void setupData()
     {
-        instance.coordinates.latitude = one(latitudes());
-        instance.coordinates.longitude = one(longitudes());
+        instance.coordinates = new Coordinate(one(latitudes()), one(longitudes()));
         instance.price = one(prices());
 
-        first.coordinates.latitude = one(latitudes());
-        first.coordinates.longitude = one(longitudes());
+        first.coordinates = new Coordinate(one(latitudes()), one(longitudes()));
         first.price = one(prices());
 
-        second.coordinates.latitude = one(latitudes());
-        second.coordinates.longitude = one(longitudes());
+        second.coordinates = new Coordinate(one(latitudes()), one(longitudes()));
         second.price = one(prices());
     }
 

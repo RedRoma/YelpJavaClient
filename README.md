@@ -18,7 +18,7 @@ The **YelpJavaClient** provides a simple Java interface for interacting with Yel
 <dependency>
 	<groupId>tech.redroma.yelp</groupId>
 	<artifactId>yelp-api</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 

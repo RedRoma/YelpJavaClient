@@ -175,7 +175,7 @@ public interface YelpAPI
         private String baseURL = DEFAULT_BASE_URL;
         
         //The HTTP Client to use; starts with a default client
-        private AlchemyHttp http = AlchemyHttp.newBuilder()
+        private AlchemyHttp http = AlchemyHttp.Factory.newBuilder()
             .usingTimeout(60, TimeUnit.SECONDS)
             .build();
            
@@ -218,8 +218,8 @@ public interface YelpAPI
          * @param http The Alchemy HTTP client to use.
          * @return
          * @throws IllegalArgumentException If the client is null
-         * @see AlchemyHttp#newBuilder() 
-         * @see AlchemyHttp#newInstance(org.apache.http.client.HttpClient, java.util.concurrent.ExecutorService, java.util.Map) 
+         * @see AlchemyHttp.Factory#newBuilder()
+         * @see AlchemyHttp.Factory#newInstance()
          */
         public Builder withHttpClient(@Required AlchemyHttp http) throws IllegalArgumentException
         {

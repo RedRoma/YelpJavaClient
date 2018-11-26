@@ -91,7 +91,7 @@ public interface OAuthTokenProvider
     public static OAuthTokenProvider newRefeshingTokenProvider(@NonEmpty String clientId, @NonEmpty String clientSecret,
                                                                @Required URL authURL) throws IllegalArgumentException
     {
-        AlchemyHttp http = AlchemyHttp.newDefaultInstance();
+        AlchemyHttp http = AlchemyHttp.Factory.newDefaultInstance();
 
         return newRefreshingTokenProvider(clientId, clientSecret, authURL, http);
     }

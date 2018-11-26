@@ -19,25 +19,23 @@ package tech.redroma.yelp;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sir.wellington.alchemy.collections.lists.Lists;
-import tech.redroma.yelp.exceptions.YelpAuthenticationException;
-import tech.redroma.yelp.exceptions.YelpBadArgumentException;
-import tech.redroma.yelp.exceptions.YelpException;
-import tech.redroma.yelp.exceptions.YelpOperationFailedException;
+import tech.redroma.yelp.exceptions.*;
 import tech.redroma.yelp.oauth.OAuthTokenProvider;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.http.AlchemyHttp;
-import tech.sirwellington.alchemy.http.AlchemyRequest;
+import tech.sirwellington.alchemy.http.AlchemyRequestSteps;
 import tech.sirwellington.alchemy.http.exceptions.AlchemyHttpException;
 
 import static java.lang.String.format;
-import static tech.sirwellington.alchemy.arguments.Arguments.checkThat;
+import static tech.sirwellington.alchemy.arguments.Arguments.*;
 import static tech.sirwellington.alchemy.arguments.assertions.Assertions.notNull;
 import static tech.sirwellington.alchemy.arguments.assertions.NetworkAssertions.validURL;
-import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.nonEmptyString;
+import static tech.sirwellington.alchemy.arguments.assertions.StringAssertions.*;
 
 /**
  * This internal class is responsible for implementing the business logic necessary for making Yelp API Queries. It implements all
@@ -90,7 +88,7 @@ final class YelpAPIImpl implements YelpAPI
     {
         String token = tokenProvider.getToken();
         checkToken(token);
-        AlchemyRequest.Step3 httpRequest = createHTTPRequestToSearch(token, request);
+        AlchemyRequestSteps.Step3 httpRequest = createHTTPRequestToSearch(token, request);
         
         String url = baseURL + URLS.BUSINESS_SEARCH;
         
@@ -159,11 +157,11 @@ final class YelpAPIImpl implements YelpAPI
             .is(nonEmptyString());
     }
     
-    private AlchemyRequest.Step3 createHTTPRequestToSearch(String token, YelpSearchRequest request)
+    private AlchemyRequestSteps.Step3 createHTTPRequestToSearch(String token, YelpSearchRequest request)
     {
-        AlchemyRequest.Step3 httpRequest = http.go()
-            .get()
-            .usingHeader(HeaderParameters.AUTHORIZATION, HeaderParameters.BEARER + " " + token);
+        AlchemyRequestSteps.Step3 httpRequest = http.go()
+                                              .get()
+                                              .usingHeader(HeaderParameters.AUTHORIZATION, HeaderParameters.BEARER + " " + token);
 
         httpRequest = requestFilledWithParametersFrom(httpRequest, request);
         return httpRequest;
@@ -267,7 +265,7 @@ final class YelpAPIImpl implements YelpAPI
     }
 
 
-    private AlchemyRequest.Step3 requestFilledWithParametersFrom(AlchemyRequest.Step3 httpRequest, YelpSearchRequest request)
+    private AlchemyRequestSteps.Step3 requestFilledWithParametersFrom(AlchemyRequestSteps.Step3 httpRequest, YelpSearchRequest request)
     {
         
         if (request.hasAttributes())

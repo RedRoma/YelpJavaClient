@@ -1,7 +1,7 @@
 YelpJavaClient
 ===================
 
-[<img src="http://brand.redroma.tech/Logos/RedRoma-Logo%402x.png" width="300">](http://RedRoma.tech)
+[<img src="https://avatars2.githubusercontent.com/u/16062337?s=400&u=9547a9cfcec08112036b279df94a6232889eec7a&v=4" width="300">](http://RedRoma.tech)
 
 [![Travis](https://travis-ci.org/RedRoma/YelpJavaClient.svg?branch=develop)](https://travis-ci.org/RedRoma/YelpJavaClient)
 ![Maven Central Version](http://img.shields.io/maven-central/v/tech.redroma.yelp/yelp-api.svg)

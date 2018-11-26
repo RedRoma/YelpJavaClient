@@ -3,7 +3,7 @@ YelpJavaClient
 
 [<img src="http://brand.redroma.tech/Logos/RedRoma-Logo%402x.png" width="300">](http://RedRoma.tech)
 
-[![Jenkins](http://jenkins.redroma.tech/job/YelpAPI/badge/icon)](http://jenkins.redroma.tech/job/YelpAPI/) [![Travis](https://travis-ci.org/RedRoma/YelpJavaClient.svg?branch=develop)](https://travis-ci.org/RedRoma/YelpJavaClient)
+[![Travis](https://travis-ci.org/RedRoma/YelpJavaClient.svg?branch=develop)](https://travis-ci.org/RedRoma/YelpJavaClient)
 ![Maven Central Version](http://img.shields.io/maven-central/v/tech.redroma.yelp/yelp-api.svg)
 
 ---
